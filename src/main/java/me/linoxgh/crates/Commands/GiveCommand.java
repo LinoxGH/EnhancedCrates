@@ -1,10 +1,14 @@
 package me.linoxgh.crates.Commands;
 
+import java.util.HashMap;
+import java.util.Map;
+
 import me.linoxgh.crates.Data.CrateStorage;
 import me.linoxgh.crates.Data.CrateType;
 import org.bukkit.Bukkit;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
+import org.bukkit.inventory.ItemStack;
 import org.jetbrains.annotations.NotNull;
 
 public class GiveCommand extends Command {
@@ -29,7 +33,12 @@ public class GiveCommand extends Command {
             if (p == null || !p.isOnline()) return true;
             CrateType crate = crates.getCrateType(args[3]);
             if (crate == null) return true;
-            p.getInventory().addItem(crate.getKey().getItem());
+            HashMap<Integer, ItemStack> unfits = p.getInventory().addItem(crate.getKey().getItem());
+            if (!(unfits.isEmpty())) {
+                for (Map.Entry<Integer, ItemStack> entry : unfits.entrySet()) {
+                    p.getLocation().getWorld().dropItem(p.getLocation(), entry.getValue());
+                }
+            }
             return true;
         }
 
@@ -45,7 +54,12 @@ public class GiveCommand extends Command {
             return true;
         }
 
-        p.getInventory().addItem(crate.getKey().getItem());
+        HashMap<Integer, ItemStack> unfits = p.getInventory().addItem(crate.getKey().getItem());
+        if (!(unfits.isEmpty())) {
+            for (Map.Entry<Integer, ItemStack> entry : unfits.entrySet()) {
+                p.getLocation().getWorld().dropItem(p.getLocation(), entry.getValue());
+            }
+        }
         sender.sendMessage("§aSuccessfully gave the key to this crate type.");
         return false;
     }
