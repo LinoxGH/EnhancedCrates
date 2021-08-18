@@ -1,0 +1,47 @@
+name: Crates
+version: ${project.version}
+main: me.linoxgh.crates.Crates
+api-version: 1.17
+authors: [ LinoxGH ]
+description: The Better solution for your Pay2Win servers!
+
+commands:
+  crates:
+    description: "Main command for Crates plugin."
+    usage: "/crates help"
+    permission: crates.main
+    permission-message: "§4You do not have enough permission to use this command."
+    aliases: [ crate ]
+
+permissions:
+  crates.*:
+    description: "Master permission node for whole plugin."
+    default: op
+  crates.use.*:
+    description: "Master permission node for using all crate types."
+    default: true
+
+  crates.create:
+    description: "Permission node responsible for creating new crates."
+    default: op
+    children: [ crates.main ]
+  crates.delete:
+    description: "Permission node responsible for deleting crates."
+    default: op
+    children: [ crates.main ]
+  crates.edit:
+    description: "Permission node responsible for editing crates."
+    default: op
+    children: [ crates.main ]
+  crates.give:
+    description: "Permission node responsible for giving keys."
+    default: op
+    children: [ crates.main ]
+  crates.list:
+    description: "Permission node responsible for listing crates."
+    default: op
+    children: [ crates.main ]
+
+  crates.main:
+    description: "Main permission node for /crates command."
+    default: op
