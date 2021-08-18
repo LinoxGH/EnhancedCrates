@@ -3,7 +3,7 @@ version: ${project.version}
 main: me.linoxgh.crates.Crates
 api-version: 1.17
 authors: [ LinoxGH ]
-description: The Better solution for your Pay2Win servers!
+description: The better solution for your Pay2Win servers!
 
 commands:
   crates:
