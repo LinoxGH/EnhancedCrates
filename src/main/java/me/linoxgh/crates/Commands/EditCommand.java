@@ -49,10 +49,10 @@ public class EditCommand extends Command {
 
             }
         // Adding/Setting weight of a reward.
-        } else if (args.length == 6 && args[2].equals("reward")) {
+        } else if (args.length == 5 && args[2].equals("reward")) {
             int weight;
             try {
-                weight = Integer.parseInt(args[5]);
+                weight = Integer.parseInt(args[4]);
             } catch (NumberFormatException ignored) {
                 p.sendMessage("§4Please enter a valid reward weight.");
                 return true;

@@ -18,13 +18,11 @@ public final class Crates extends JavaPlugin {
             getLogger().info("Successfully loaded crate types.");
         } else {
             getLogger().warning("Could not load crate types.");
-            return;
         }
         if (ioManager.loadCrates()) {
             getLogger().info("Successfully loaded crates.");
         } else {
             getLogger().warning("Could not load crates.");
-            return;
         }
 
         getCommand("crates").setExecutor(new MainCommand(crateStorage));
@@ -33,7 +31,7 @@ public final class Crates extends JavaPlugin {
     @Override
     public void onDisable() {
         if (ioManager.saveCrateTypes()) {
-            getLogger().info("Successfully saves crate types.");
+            getLogger().info("Successfully saved crate types.");
         } else {
             getLogger().warning("Could not save crate types.");
         }

@@ -12,12 +12,19 @@ import org.jetbrains.annotations.NotNull;
 public class HelpCommand extends Command {
 
     private final HashMap<UUID, List<String[]>> cachedHelp = new HashMap<>();
+    private final HashMap<UUID, Long> cacheTimestamp = new HashMap<>();
 
     @Override
     public boolean execute(@NotNull CommandSender sender, @NotNull String[] args) {
-
         if (sender instanceof Player) {
             UUID id = ((Player) sender).getUniqueId();
+            if (cacheTimestamp.containsKey(id)) {
+                if ((System.currentTimeMillis() - cacheTimestamp.get(id)) > 900_000) {
+                    cachedHelp.remove(id);
+                    cacheTimestamp.remove(id);
+                }
+            }
+            cacheTimestamp.put(id, System.currentTimeMillis());
             if (cachedHelp.containsKey(id)) {
                 return sendMessage(sender, cachedHelp.get(id), args);
             }
@@ -36,7 +43,7 @@ public class HelpCommand extends Command {
             messages.add(" ");
         }
         if (sender.hasPermission("crates.create")) {
-            messages.add("§6/crates create &9<crate-name> <x> <y> <z> <world> <crate-type>");
+            messages.add("§6/crates create §9<crate-name> <x> <y> <z> <world> <crate-type>");
             messages.add("§e- §aCreates a new crate.");
             messages.add("§e- §aYou can edit the rewards with §6/crates edit§a.");
             messages.add(" ");
@@ -52,7 +59,7 @@ public class HelpCommand extends Command {
             messages.add(" ");
         }
         if (sender.hasPermission("crates.edit")) {
-            messages.add("§6/crates edit §9<crate-type> §6reward add|set-weight §9<name> <weight>");
+            messages.add("§6/crates edit §9<crate-type> §6reward add|set-weight §9<weight>");
             messages.add("§e- §aAdds a new reward to the crate type.");
             messages.add("§e- §aYou can also use this to change the weight of a reward.");
             messages.add("§6/crates edit §9<crate-type> §6reward remove");
@@ -88,9 +95,11 @@ public class HelpCommand extends Command {
             if (total > 3) {
                 pages.get(pageIndex).set(pages.get(pageIndex).size() - 1, "§e.*.-----_-----{ §3Help " + (pageIndex + 1) + " §e}-----_-----.*.");
                 pageIndex++;
+                total = 0;
             }
 
             if (pages.size() < pageIndex + 1) pages.add(new ArrayList<>());
+            if (total == 0) pages.get(pageIndex).add("§e.*.-----_-----{ §3Crates §e}-----_-----.*.");
             pages.get(pageIndex).add(message);
             if (message.equals(" ")) total++;
         }
@@ -102,13 +111,13 @@ public class HelpCommand extends Command {
     }
 
     private boolean sendMessage(@NotNull CommandSender sender, @NotNull List<String[]> messages, @NotNull String[] args) {
-        if (args.length == 0) {
+        if (args.length == 0 || args.length == 1) {
             sender.sendMessage(messages.get(0));
             return true;
         } else {
             try {
                 int page = Integer.parseInt(args[1]);
-                if (page > messages.size()) return false;
+                if (page >= messages.size()) return false;
 
                 sender.sendMessage(messages.get(page));
                 return true;

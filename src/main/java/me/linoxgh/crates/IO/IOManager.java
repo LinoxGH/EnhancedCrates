@@ -32,31 +32,27 @@ public class IOManager {
 
     @SuppressWarnings("ResultOfMethodCallIgnored")
     public void checkFiles() {
-        if (!cratesFile.exists()) {
-            try {
-                cratesFile.mkdirs();
-                cratesFile.createNewFile();
-            } catch (IOException e) {
-                Bukkit.getConsoleSender().sendMessage("§4Failed to create the crates.json file.");
-                e.printStackTrace();
-                return;
-            }
+        try {
+            cratesFile.getParentFile().mkdirs();
+            cratesFile.createNewFile();
+        } catch (IOException e) {
+            Bukkit.getConsoleSender().sendMessage("§4Failed to create the crates.json file.");
+            e.printStackTrace();
         }
 
-        if (!crateTypesFile.exists()) {
-            try {
-                crateTypesFile.mkdirs();
-                crateTypesFile.createNewFile();
-            } catch (IOException e) {
-                Bukkit.getConsoleSender().sendMessage("§4Failed to create the crate-types.json file.");
-                e.printStackTrace();
-            }
+        try {
+            crateTypesFile.getParentFile().mkdirs();
+            crateTypesFile.createNewFile();
+        } catch (IOException e) {
+            Bukkit.getConsoleSender().sendMessage("§4Failed to create the crate-types.json file.");
+            e.printStackTrace();
         }
     }
 
     public boolean loadCrates() {
         try {
             Map<?, ?> crates =  new Gson().fromJson(new FileReader(cratesFile), Map.class);
+            if (crates == null) return false;
             for (Map.Entry<?, ?> entry : crates.entrySet()) {
                 if (!(entry.getKey() instanceof String)) return false;
                 if (!(entry.getValue() instanceof Crate)) return false;
@@ -73,6 +69,7 @@ public class IOManager {
     public boolean loadCrateTypes() {
         try {
             Map<?, ?> crates =  new Gson().fromJson(new FileReader(crateTypesFile), Map.class);
+            if (crates == null) return false;
             for (Map.Entry<?, ?> entry : crates.entrySet()) {
                 if (!(entry.getKey() instanceof String)) return false;
                 if (!(entry.getValue() instanceof CrateType)) return false;
@@ -87,6 +84,7 @@ public class IOManager {
     }
 
     public boolean saveCrates() {
+        if (!cratesFile.exists()) return false;
         try {
             String json = new Gson().toJson(crates.getCrates());
             new FileWriter(cratesFile).write(json);
@@ -98,6 +96,7 @@ public class IOManager {
     }
 
     public boolean saveCrateTypes() {
+        if (!crateTypesFile.exists()) return false;
         try {
             String json = new Gson().toJson(crates.getCrateTypes());
             new FileWriter(crateTypesFile).write(json);

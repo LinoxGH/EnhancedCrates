@@ -29,7 +29,7 @@ public class CrateType {
     }
 
     public void addDrop(int weight, @NotNull ItemStack drop) {
-        drops.put(drops.lastKey() + weight, drop);
+        drops.put((drops.isEmpty() ? 0 : drops.lastKey()) + weight, drop);
         totalWeight += weight;
     }
     public void deleteDrop(@NotNull ItemStack drop) {
