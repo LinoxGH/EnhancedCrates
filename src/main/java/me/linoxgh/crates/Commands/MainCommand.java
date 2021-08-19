@@ -28,7 +28,7 @@ public class MainCommand implements CommandExecutor {
 
     @Override
     public boolean onCommand(@NotNull CommandSender sender, @NotNull Command command, @NotNull String label, @NotNull String[] args) {
-        if (args.length < 1) {
+        if (args.length == 0) {
             return help.execute(sender, args);
         }
 
