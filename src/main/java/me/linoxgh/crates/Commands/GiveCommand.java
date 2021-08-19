@@ -28,7 +28,7 @@ public class GiveCommand extends Command {
         if (args.length < 4 || args.length > 5) return false;
         if (!(args[2].equals("key"))) return false;
 
-        if (args[4].equals("silent")) {
+        if (args.length == 5 && args[4].equals("silent")) {
             Player p = Bukkit.getPlayer(args[1]);
             if (p == null || !p.isOnline()) return true;
             CrateType crate = crates.getCrateType(args[3]);
@@ -61,6 +61,6 @@ public class GiveCommand extends Command {
             }
         }
         sender.sendMessage("§aSuccessfully gave the key to this crate type.");
-        return false;
+        return true;
     }
 }
