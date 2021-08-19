@@ -1,5 +1,6 @@
 package me.linoxgh.crates.Commands;
 
+import me.linoxgh.crates.Data.Crate;
 import me.linoxgh.crates.Data.CrateStorage;
 import org.bukkit.command.CommandSender;
 import org.jetbrains.annotations.NotNull;
@@ -19,8 +20,14 @@ public class DeleteCommand extends Command {
         }
         if (args.length != 2) return false;
 
+        Crate crate = crates.getCrate(args[1]);
+        if (crate == null) {
+            sender.sendMessage("§4Could not find the crate.");
+            return true;
+        }
+
         crates.removeCrate(args[1]);
         sender.sendMessage("§aSuccessfully removed crate.");
-        return false;
+        return true;
     }
 }
