@@ -13,6 +13,7 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.block.Action;
 import org.bukkit.event.player.PlayerInteractEvent;
+import org.bukkit.inventory.EquipmentSlot;
 import org.bukkit.inventory.ItemStack;
 import org.jetbrains.annotations.NotNull;
 
@@ -27,6 +28,7 @@ public class Listeners implements Listener {
     @EventHandler
     public void onInteract(PlayerInteractEvent e) {
         if (e.getAction() != Action.RIGHT_CLICK_BLOCK) return;
+        if (e.getHand() != EquipmentSlot.HAND) return;
 
         Player p = e.getPlayer();
         Block b = e.getClickedBlock();
@@ -34,6 +36,7 @@ public class Listeners implements Listener {
 
         Crate crate = crates.getCrate(new BlockPosition(b.getX(), b.getY(), b.getZ(), b.getWorld().getName()));
         if (crate == null) return;
+
         CrateType type = crates.getCrateType(crate.getCrateType());
         if (type == null) return;
 
@@ -41,13 +44,20 @@ public class Listeners implements Listener {
 
         ItemStack heldItem = e.getItem();
         if (heldItem == null) return;
-        if (heldItem.equals(type.getKey().getItem())) {
+
+        if (heldItem.isSimilar(type.getKey())) {
+            int newAmount = heldItem.getAmount() - type.getKey().getAmount();
+            if (newAmount < 0) return;
+
             ItemStack drop = type.getRandomDrop();
             if (drop == null) return;
-            heldItem.setAmount(heldItem.getAmount() - 1);
+
+            heldItem.setAmount(newAmount);
             for (Map.Entry<Integer, ItemStack> entry : p.getInventory().addItem(drop).entrySet()) {
                 p.getWorld().dropItem(p.getLocation(), entry.getValue());
             }
+
+            e.setCancelled(true);
         }
     }
 }

@@ -37,8 +37,10 @@ public class HelpCommand extends Command {
             messages.add(" ");
         }
         if (sender.hasPermission("crates.list")) {
-            messages.add("§6/crates list");
+            messages.add("§6/crates list crates|types");
             messages.add("§e- §aLists down all of the crates and their types.");
+            messages.add("§6/crates list rewards §9<crate-type>");
+            messages.add("§e- §aLists down all of the rewards for the specified crate type.");
             messages.add(" ");
         }
         if (sender.hasPermission("crates.create")) {

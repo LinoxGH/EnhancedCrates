@@ -2,7 +2,6 @@ package me.linoxgh.crates.Commands;
 
 import me.linoxgh.crates.Data.CrateStorage;
 import me.linoxgh.crates.Data.CrateType;
-import me.linoxgh.crates.Data.Key;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
@@ -41,7 +40,7 @@ public class TypeCommand extends Command {
                 return true;
             }
 
-            crates.addCrateType(args[2], new CrateType(new Key(heldItem)));
+            crates.addCrateType(args[2], new CrateType(heldItem));
             p.sendMessage("§aSuccessfully added a new crate type.");
             return true;
 

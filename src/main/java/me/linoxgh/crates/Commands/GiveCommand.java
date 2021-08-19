@@ -33,7 +33,7 @@ public class GiveCommand extends Command {
             if (p == null || !p.isOnline()) return true;
             CrateType crate = crates.getCrateType(args[3]);
             if (crate == null) return true;
-            HashMap<Integer, ItemStack> unfits = p.getInventory().addItem(crate.getKey().getItem());
+            HashMap<Integer, ItemStack> unfits = p.getInventory().addItem(crate.getKey());
             if (!(unfits.isEmpty())) {
                 for (Map.Entry<Integer, ItemStack> entry : unfits.entrySet()) {
                     p.getLocation().getWorld().dropItem(p.getLocation(), entry.getValue());
@@ -54,7 +54,7 @@ public class GiveCommand extends Command {
             return true;
         }
 
-        HashMap<Integer, ItemStack> unfits = p.getInventory().addItem(crate.getKey().getItem());
+        HashMap<Integer, ItemStack> unfits = p.getInventory().addItem(crate.getKey());
         if (!(unfits.isEmpty())) {
             for (Map.Entry<Integer, ItemStack> entry : unfits.entrySet()) {
                 p.getLocation().getWorld().dropItem(p.getLocation(), entry.getValue());

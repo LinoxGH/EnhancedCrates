@@ -2,7 +2,6 @@ package me.linoxgh.crates.Commands;
 
 import me.linoxgh.crates.Data.CrateStorage;
 import me.linoxgh.crates.Data.CrateType;
-import me.linoxgh.crates.Data.Key;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
@@ -43,7 +42,7 @@ public class EditCommand extends Command {
                 return true;
 
             } else if (args[2].equals("key") && args[3].equals("set")) {
-                crate.setKey(new Key(heldItem));
+                crate.setKey(heldItem);
                 p.sendMessage("§aSuccessfully changed the key of this crate type.");
                 return true;
 

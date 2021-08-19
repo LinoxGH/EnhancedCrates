@@ -1,8 +1,12 @@
 package me.linoxgh.crates;
 
 import me.linoxgh.crates.Commands.MainCommand;
+import me.linoxgh.crates.Data.BlockPosition;
+import me.linoxgh.crates.Data.Crate;
 import me.linoxgh.crates.Data.CrateStorage;
+import me.linoxgh.crates.Data.CrateType;
 import me.linoxgh.crates.IO.IOManager;
+import org.bukkit.configuration.serialization.ConfigurationSerialization;
 import org.bukkit.plugin.java.JavaPlugin;
 
 public final class Crates extends JavaPlugin {
@@ -12,6 +16,10 @@ public final class Crates extends JavaPlugin {
 
     @Override
     public void onEnable() {
+        ConfigurationSerialization.registerClass(Crate.class);
+        ConfigurationSerialization.registerClass(CrateType.class);
+        ConfigurationSerialization.registerClass(BlockPosition.class);
+
         ioManager = new IOManager(this, crateStorage);
         ioManager.checkFiles();
         if (ioManager.loadCrateTypes()) {
@@ -26,20 +34,29 @@ public final class Crates extends JavaPlugin {
         }
 
         getCommand("crates").setExecutor(new MainCommand(crateStorage));
+        new Listeners(this, crateStorage);
     }
 
     @Override
     public void onDisable() {
-        if (ioManager.saveCrateTypes()) {
-            getLogger().info("Successfully saved crate types.");
+        if (!crateStorage.getCrateTypes().isEmpty()) {
+            if (ioManager.saveCrateTypes()) {
+                getLogger().info("Successfully saved crate types.");
+            } else {
+                getLogger().warning("Could not save crate types.");
+            }
         } else {
-            getLogger().warning("Could not save crate types.");
-        }
-        if (ioManager.saveCrates()) {
-            getLogger().info("Successfully saved crates.");
-        } else {
-            getLogger().warning("Could not save crates.");
+            getLogger().info("There was no crate types to save.");
         }
 
+        if (!crateStorage.getCrates().isEmpty()) {
+            if (ioManager.saveCrates()) {
+                getLogger().info("Successfully saved crates.");
+            } else {
+                getLogger().warning("Could not save crates.");
+            }
+        } else {
+            getLogger().info("There was no crates to save.");
+        }
     }
 }
