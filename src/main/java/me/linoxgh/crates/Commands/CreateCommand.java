@@ -28,12 +28,25 @@ public class CreateCommand extends Command {
                 return true;
             }
 
+            Crate testName = crates.getCrate(args[1]);
+            if (testName != null) {
+                sender.sendMessage("§4A crate with this name already exists.");
+                return true;
+            }
+
             BlockPosition pos = new BlockPosition(
                     Integer.parseInt(args[2]),
                     Integer.parseInt(args[3]),
                     Integer.parseInt(args[4]),
                     args[5]
             );
+
+            Crate testPos = crates.getCrate(pos);
+            if (testPos != null) {
+                sender.sendMessage("§4A crate in this coordinates already exists.");
+                return true;
+            }
+
             Crate crate = new Crate(pos, args[6]);
             crates.addCrate(args[1], crate);
 
