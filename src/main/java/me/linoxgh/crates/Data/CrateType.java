@@ -8,9 +8,6 @@ import org.bukkit.inventory.ItemStack;
 import org.jetbrains.annotations.NotNull;
 
 public class CrateType {
-
-    private int totalWeight;
-
     private TreeMap<Integer, ItemStack> drops;
     private HashMap<ItemStack, Integer> weights;
     private Key key;
@@ -22,7 +19,6 @@ public class CrateType {
         weights = new HashMap<>();
     }
 
-    public int getTotalWeight() { return totalWeight; }
     public @NotNull TreeMap<Integer, ItemStack> getDrops() {
         return drops;
     }
@@ -49,5 +45,4 @@ public class CrateType {
     public void setKey(@NotNull Key key) {
         this.key = key;
     }
-
 }

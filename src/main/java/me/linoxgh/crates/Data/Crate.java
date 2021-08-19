@@ -3,7 +3,6 @@ package me.linoxgh.crates.Data;
 import org.jetbrains.annotations.NotNull;
 
 public class Crate {
-
     private BlockPosition pos;
     private String crateType;
 
@@ -25,5 +24,4 @@ public class Crate {
     public void setCrateType(@NotNull String crateType) {
         this.crateType = crateType;
     }
-
 }
