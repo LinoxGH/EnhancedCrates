@@ -5,11 +5,10 @@ import java.util.Objects;
 import org.jetbrains.annotations.NotNull;
 
 public class BlockPosition {
-
-    private int x;
-    private int y;
-    private int z;
-    private String world;
+    private final int x;
+    private final int y;
+    private final int z;
+    private final String world;
 
     public BlockPosition(int x, int y, int z, @NotNull String world) {
         this.x = x;
@@ -29,19 +28,6 @@ public class BlockPosition {
     }
     public @NotNull String getWorld() {
         return world;
-    }
-
-    public void setX(int x) {
-        this.x = x;
-    }
-    public void setY(int y) {
-        this.y = y;
-    }
-    public void setZ(int z) {
-        this.z = z;
-    }
-    public void setWorld(@NotNull String world) {
-        this.world = world;
     }
 
     @Override
