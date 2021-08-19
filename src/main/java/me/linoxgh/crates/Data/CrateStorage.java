@@ -1,6 +1,7 @@
 package me.linoxgh.crates.Data;
 
 import java.util.HashMap;
+import java.util.Map;
 
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -19,6 +20,12 @@ public class CrateStorage {
 
     public @Nullable Crate getCrate(@NotNull String name) {
         return crates.get(name);
+    }
+    public @Nullable Crate getCrate(@NotNull BlockPosition pos) {
+        for (Map.Entry<String, Crate> entry : crates.entrySet()) {
+            if (entry.getValue().getPos().equals(pos)) return entry.getValue();
+        }
+        return null;
     }
     public @Nullable CrateType getCrateType(@NotNull String name) {
         return crateTypes.get(name);

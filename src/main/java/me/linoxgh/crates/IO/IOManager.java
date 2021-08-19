@@ -16,12 +16,14 @@ import org.bukkit.Bukkit;
 import org.jetbrains.annotations.NotNull;
 
 public class IOManager {
+    private final Crates plugin;
     private final CrateStorage crates;
 
     private final File cratesFile;
     private final File crateTypesFile;
 
     public IOManager(@NotNull Crates plugin, @NotNull CrateStorage crates) {
+        this.plugin = plugin;
         this.crates = crates;
 
         cratesFile = new File(plugin.getDataFolder().getPath() + File.separator + "crates.json");
@@ -61,7 +63,7 @@ public class IOManager {
                 this.crates.addCrate((String) entry.getKey(), (Crate) entry.getValue());
             }
         } catch (FileNotFoundException e) {
-            Bukkit.getConsoleSender().sendMessage("§4Failed to find crates.json file.");
+            plugin.getLogger().warning("Failed to find crates.json file.");
             e.printStackTrace();
             return false;
         }
@@ -77,7 +79,7 @@ public class IOManager {
                 this.crates.addCrateType((String) entry.getKey(), (CrateType) entry.getValue());
             }
         } catch (FileNotFoundException e) {
-            Bukkit.getConsoleSender().sendMessage("§4Failed to find crate-types.json file.");
+            plugin.getLogger().warning("Failed to find crate-types.json file.");
             e.printStackTrace();
             return false;
         }
