@@ -31,7 +31,6 @@ public class HelpCommand extends Command {
         }
 
         List<String> messages = new ArrayList<>();
-        messages.add("§e.*.-----_-----{ §3Crates §e}-----_-----.*.");
         if (sender.hasPermission("crates.main")) {
             messages.add("§6/crates help §3[page]");
             messages.add("§e- §aShows the help pages.");
@@ -93,18 +92,19 @@ public class HelpCommand extends Command {
         List<List<String>> pages = new ArrayList<>();
         for (String message : messages) {
             if (total > 3) {
-                pages.get(pageIndex).set(pages.get(pageIndex).size() - 1, "§e.*.-----_-----{ §3Help " + (pageIndex + 1) + " §e}-----_-----.*.");
                 pageIndex++;
                 total = 0;
             }
 
             if (pages.size() < pageIndex + 1) pages.add(new ArrayList<>());
-            if (total == 0) pages.get(pageIndex).add("§e.*.-----_-----{ §3Crates §e}-----_-----.*.");
             pages.get(pageIndex).add(message);
             if (message.equals(" ")) total++;
         }
 
-        for (List<String> page : pages) {
+        for (int i = 0; i < pages.size(); i++) {
+            List<String> page = pages.get(i);
+            page.add(0, "§e.*.-----_-----{ §3Crates §e}-----_-----.*.");
+            page.add("§e.*.-----_-----{ §3Help " + (i + 1) + " §e}-----_-----.*.");
             result.add(page.toArray(new String[0]));
         }
         return result;
@@ -117,9 +117,14 @@ public class HelpCommand extends Command {
         } else {
             try {
                 int page = Integer.parseInt(args[1]);
-                if (page >= messages.size()) return false;
-
-                sender.sendMessage(messages.get(page));
+                if (page > messages.size()) {
+                    return false;
+                }
+                if (page <= 0) {
+                    sender.sendMessage(messages.get(0));
+                    return true;
+                }
+                sender.sendMessage(messages.get(page - 1));
                 return true;
             } catch (NumberFormatException ignored) {
                 return false;
