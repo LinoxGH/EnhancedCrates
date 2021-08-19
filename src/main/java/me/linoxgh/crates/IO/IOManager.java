@@ -5,7 +5,6 @@ import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
-import java.util.HashMap;
 import java.util.Map;
 
 import com.google.gson.Gson;
@@ -14,8 +13,6 @@ import me.linoxgh.crates.Data.Crate;
 import me.linoxgh.crates.Data.CrateStorage;
 import me.linoxgh.crates.Data.CrateType;
 import org.bukkit.Bukkit;
-import org.bukkit.configuration.file.FileConfiguration;
-import org.bukkit.configuration.file.YamlConfiguration;
 import org.jetbrains.annotations.NotNull;
 
 public class IOManager {
@@ -31,6 +28,7 @@ public class IOManager {
         crateTypesFile = new File(plugin.getDataFolder().getPath() + File.separator + "crate-types.json");
     }
 
+    @SuppressWarnings("ResultOfMethodCallIgnored")
     public void checkFiles() {
         if (!cratesFile.exists()) {
             try {
@@ -56,32 +54,34 @@ public class IOManager {
 
     public boolean loadCrates() {
         try {
-            Map crates =  new Gson().fromJson(new FileReader(cratesFile), Map.class);
-            for (Object entry : crates.entrySet()) {
-                if (!(entry instanceof Map.Entry)) return false;
-                this.crates.addCrate(((Map.Entry<String, Crate>) entry).getKey(), ((Map.Entry<String, Crate>) entry).getValue());
+            Map<?, ?> crates =  new Gson().fromJson(new FileReader(cratesFile), Map.class);
+            for (Map.Entry<?, ?> entry : crates.entrySet()) {
+                if (!(entry.getKey() instanceof String)) return false;
+                if (!(entry.getValue() instanceof Crate)) return false;
+                this.crates.addCrate((String) entry.getKey(), (Crate) entry.getValue());
             }
         } catch (FileNotFoundException e) {
             Bukkit.getConsoleSender().sendMessage("§4Failed to find crates.json file.");
             e.printStackTrace();
             return false;
         }
-        return !crates.getCrateTypes().isEmpty();
+        return true;
     }
 
     public boolean loadCrateTypes() {
         try {
-            Map crates =  new Gson().fromJson(new FileReader(crateTypesFile), Map.class);
-            for (Object entry : crates.entrySet()) {
-                if (!(entry instanceof Map.Entry)) return false;
-                this.crates.addCrateType(((Map.Entry<String, CrateType>) entry).getKey(), ((Map.Entry<String, CrateType>) entry).getValue());
+            Map<?, ?> crates =  new Gson().fromJson(new FileReader(crateTypesFile), Map.class);
+            for (Map.Entry<?, ?> entry : crates.entrySet()) {
+                if (!(entry.getKey() instanceof String)) return false;
+                if (!(entry.getValue() instanceof CrateType)) return false;
+                this.crates.addCrateType((String) entry.getKey(), (CrateType) entry.getValue());
             }
         } catch (FileNotFoundException e) {
             Bukkit.getConsoleSender().sendMessage("§4Failed to find crate-types.json file.");
             e.printStackTrace();
             return false;
         }
-        return !crates.getCrateTypes().isEmpty();
+        return true;
     }
 
     public boolean saveCrates() {

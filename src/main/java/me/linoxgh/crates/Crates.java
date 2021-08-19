@@ -14,6 +14,7 @@ public final class Crates extends JavaPlugin {
     @Override
     public void onEnable() {
         ioManager = new IOManager(this, crateStorage);
+        ioManager.checkFiles();
         if (ioManager.loadCrateTypes()) {
             Bukkit.getConsoleSender().sendMessage("§aSuccessfully loaded crate types.");
         } else {
