@@ -1,6 +1,6 @@
-package me.linoxgh.crates.Commands;
+package me.linoxgh.cratesenhanced.Commands;
 
-import me.linoxgh.crates.Data.CrateStorage;
+import me.linoxgh.cratesenhanced.Data.CrateStorage;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;

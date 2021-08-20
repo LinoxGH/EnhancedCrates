@@ -1,12 +1,12 @@
-package me.linoxgh.crates;
+package me.linoxgh.cratesenhanced;
 
 import java.util.ArrayList;
 import java.util.List;
 
-import me.linoxgh.crates.Data.BlockPosition;
-import me.linoxgh.crates.Data.Crate;
-import me.linoxgh.crates.Data.CrateStorage;
-import me.linoxgh.crates.Data.CrateType;
+import me.linoxgh.cratesenhanced.Data.BlockPosition;
+import me.linoxgh.cratesenhanced.Data.Crate;
+import me.linoxgh.cratesenhanced.Data.CrateStorage;
+import me.linoxgh.cratesenhanced.Data.CrateType;
 import org.bukkit.Bukkit;
 import org.bukkit.Effect;
 import org.bukkit.Location;

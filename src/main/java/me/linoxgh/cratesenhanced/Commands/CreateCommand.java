@@ -1,8 +1,8 @@
-package me.linoxgh.crates.Commands;
+package me.linoxgh.cratesenhanced.Commands;
 
-import me.linoxgh.crates.Data.BlockPosition;
-import me.linoxgh.crates.Data.Crate;
-import me.linoxgh.crates.Data.CrateStorage;
+import me.linoxgh.cratesenhanced.Data.BlockPosition;
+import me.linoxgh.cratesenhanced.Data.Crate;
+import me.linoxgh.cratesenhanced.Data.CrateStorage;
 import org.bukkit.Bukkit;
 import org.bukkit.command.CommandSender;
 import org.jetbrains.annotations.NotNull;

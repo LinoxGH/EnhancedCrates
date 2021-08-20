@@ -1,4 +1,4 @@
-package me.linoxgh.crates.IO;
+package me.linoxgh.cratesenhanced.IO;
 
 import java.io.EOFException;
 import java.io.File;
@@ -8,10 +8,10 @@ import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
 
-import me.linoxgh.crates.Crates;
-import me.linoxgh.crates.Data.Crate;
-import me.linoxgh.crates.Data.CrateStorage;
-import me.linoxgh.crates.Data.CrateType;
+import me.linoxgh.cratesenhanced.Crates;
+import me.linoxgh.cratesenhanced.Data.Crate;
+import me.linoxgh.cratesenhanced.Data.CrateStorage;
+import me.linoxgh.cratesenhanced.Data.CrateType;
 import org.bukkit.Bukkit;
 import org.bukkit.util.io.BukkitObjectInputStream;
 import org.bukkit.util.io.BukkitObjectOutputStream;

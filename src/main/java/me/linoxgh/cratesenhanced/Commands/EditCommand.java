@@ -1,7 +1,7 @@
-package me.linoxgh.crates.Commands;
+package me.linoxgh.cratesenhanced.Commands;
 
-import me.linoxgh.crates.Data.CrateStorage;
-import me.linoxgh.crates.Data.CrateType;
+import me.linoxgh.cratesenhanced.Data.CrateStorage;
+import me.linoxgh.cratesenhanced.Data.CrateType;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;

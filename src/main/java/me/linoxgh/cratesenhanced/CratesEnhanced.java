@@ -1,11 +1,11 @@
-package me.linoxgh.crates;
+package me.linoxgh.cratesenhanced;
 
-import me.linoxgh.crates.Commands.MainCommand;
-import me.linoxgh.crates.Data.BlockPosition;
-import me.linoxgh.crates.Data.Crate;
-import me.linoxgh.crates.Data.CrateStorage;
-import me.linoxgh.crates.Data.CrateType;
-import me.linoxgh.crates.IO.IOManager;
+import me.linoxgh.cratesenhanced.Commands.MainCommand;
+import me.linoxgh.cratesenhanced.Data.BlockPosition;
+import me.linoxgh.cratesenhanced.Data.Crate;
+import me.linoxgh.cratesenhanced.Data.CrateStorage;
+import me.linoxgh.cratesenhanced.Data.CrateType;
+import me.linoxgh.cratesenhanced.IO.IOManager;
 import org.bstats.bukkit.Metrics;
 import org.bukkit.configuration.serialization.ConfigurationSerialization;
 import org.bukkit.plugin.java.JavaPlugin;
