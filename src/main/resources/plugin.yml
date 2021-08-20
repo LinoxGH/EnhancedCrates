@@ -35,7 +35,7 @@ permissions:
     default: op
     children: [ crates.main ]
   crates.edit:
-    description: "Permission node responsible for editing crates."
+    description: "Permission node responsible for editing crate types."
     default: op
     children: [ crates.main ]
   crates.give:
