@@ -52,8 +52,6 @@ public class Listeners implements Listener {
         if (b == null) return;
 
         BlockPosition pos = new BlockPosition(b.getX(), b.getY(), b.getZ(), b.getWorld().getName());
-        if (cooldowns.contains(pos)) return;
-
         Crate crate = crates.getCrate(pos);
         if (crate == null) return;
 
@@ -72,11 +70,12 @@ public class Listeners implements Listener {
             ItemStack drop = type.getRandomDrop();
             if (drop == null) return;
 
-            cooldowns.add(pos);
-            playCrateAnimations(crate, p, drop, heldItem, newAmount);
-
             e.setUseInteractedBlock(Event.Result.DENY);
             e.setUseItemInHand(Event.Result.DENY);
+            if (cooldowns.contains(pos)) return;
+
+            cooldowns.add(pos);
+            playCrateAnimations(crate, p, drop, heldItem, newAmount);
         }
     }
 
@@ -129,8 +128,10 @@ public class Listeners implements Listener {
                                     item.setCanPlayerPickup(true);
                                     item.setWillAge(false);
                                     item.setPickupDelay(20);
+                                    item.setItemStack(drop);
                                 }
                         );
+                        cooldowns.remove(crate.getPos());
                     }, 20L);
                 }, 20L);
             }, 20L);

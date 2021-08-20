@@ -77,6 +77,7 @@ public class ListCommand extends Command {
                     ItemStack drop = entry.getKey();
                     sender.sendMessage(Component.text("§e- §f")
                             .append(drop.displayName().hoverEvent(drop.asHoverEvent()))
+                            .append(Component.text(" §6x§9" + drop.getAmount()))
                             .append(Component.text(" §e- §f" + entry.getValue().toString()))
                     );
                 }

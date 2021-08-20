@@ -6,7 +6,7 @@
 
     <groupId>me.linoxgh</groupId>
     <artifactId>Crates</artifactId>
-    <version>0.1</version>
+    <version>1.0</version>
     <packaging>jar</packaging>
 
     <name>Crates</name>
