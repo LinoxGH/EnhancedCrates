@@ -58,6 +58,9 @@ public class Listeners implements Listener {
         CrateType type = crates.getCrateType(crate.getCrateType());
         if (type == null) return;
 
+        e.setUseInteractedBlock(Event.Result.DENY);
+        e.setUseItemInHand(Event.Result.DENY);
+
         if (!p.hasPermission("crates.use.*") && !p.hasPermission("crates.use." + crate.getCrateType())) return;
 
         ItemStack heldItem = e.getItem();
@@ -70,8 +73,6 @@ public class Listeners implements Listener {
             ItemStack drop = type.getRandomDrop();
             if (drop == null) return;
 
-            e.setUseInteractedBlock(Event.Result.DENY);
-            e.setUseItemInHand(Event.Result.DENY);
             if (cooldowns.contains(pos)) return;
 
             cooldowns.add(pos);
@@ -100,6 +101,8 @@ public class Listeners implements Listener {
 
         BlockPosition pos = crate.getPos();
         Location loc = new Location(Bukkit.getWorld(pos.getWorld()), pos.getX(), pos.getY(), pos.getZ());
+        loc.getWorld().playEffect(loc, Effect.MOBSPAWNER_FLAMES, 1);
+        loc.getWorld().playSound(loc, Sound.BLOCK_WOODEN_BUTTON_CLICK_ON, 1F, 1F);
 
         Bukkit.getScheduler().scheduleSyncDelayedTask(plugin, () -> {
             loc.getWorld().playEffect(loc, Effect.MOBSPAWNER_FLAMES, 1);
@@ -114,11 +117,12 @@ public class Listeners implements Listener {
                     loc.getWorld().playSound(loc, Sound.BLOCK_WOODEN_BUTTON_CLICK_ON, 3F, 1F);
 
                     Bukkit.getScheduler().scheduleSyncDelayedTask(plugin, () -> {
-                        loc.getWorld().spawnParticle(Particle.EXPLOSION_NORMAL, loc, 1);
+                        Location topLoc = loc.set(loc.getX(), loc.getY() + 1D, loc.getZ()).toCenterLocation();
+                        loc.getWorld().spawnParticle(Particle.EXPLOSION_LARGE, topLoc, 1);
                         loc.getWorld().playSound(loc, Sound.ENTITY_ARROW_HIT_PLAYER, 1F, 1F);
 
                         loc.getWorld().spawnEntity(
-                                loc.set(loc.getX(), loc.getY() + 1D, loc.getZ()),
+                                topLoc,
                                 EntityType.DROPPED_ITEM,
                                 CreatureSpawnEvent.SpawnReason.CUSTOM,
                                 (entity) -> {
@@ -126,7 +130,7 @@ public class Listeners implements Listener {
                                     item.setOwner(p.getUniqueId());
                                     item.setCanMobPickup(false);
                                     item.setCanPlayerPickup(true);
-                                    item.setWillAge(false);
+                                    item.setWillAge(true);
                                     item.setPickupDelay(20);
                                     item.setItemStack(drop);
                                 }
