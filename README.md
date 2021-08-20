@@ -1,8 +1,8 @@
-### Crates Enhanced
+# Crates Enhanced
 
-### WARNING! This plugin only works with paper.
+# WARNING! This plugin only works with paper.
 
-# Description:
+### Description:
 Crates Enhanced is a new Crates plugin that supports custom items, fully configurable crate types and multiple crates for each type.
 
 Here is how the plugin works:
@@ -12,7 +12,7 @@ The chance to get a specific reward is determined by its weight. The rewards wit
 
 A crate doesn't have to be a chest or an enderchest block, it may very well be a grass block, allowing you to use custom crate block textures via resource packs.
 
-# Features:
+### Features:
 - Custom Item support
 - Multiple crate and crate type support
 - Freedom to choose your own key for the crates
@@ -20,7 +20,7 @@ A crate doesn't have to be a chest or an enderchest block, it may very well be a
 - Easy on performance
 - Free and open source
 
-# Commands:
+### Commands:
 - /crates - Displays help.
 - /crates help [page] - Displays help.
 - /crates list crates|types - Displays a list of all crates and types.
@@ -33,7 +33,7 @@ A crate doesn't have to be a chest or an enderchest block, it may very well be a
 - /crates edit <crate-type> key set - Changes the key for the crate type with held item.
 - /crates give <player> key <crate-type> [silent] - Gives a key for the crate type to the player. A silent give won't print out any messages, hence more suitable for other plugins' use.
 
-# Permissions:
+### Permissions:
 - crates.* - Master permission node for the whole plugin.
 - crates.use.* - Master permission node for using all crate types.
 
@@ -44,10 +44,10 @@ A crate doesn't have to be a chest or an enderchest block, it may very well be a
 - crates.give - Permission node responsible for giving keys.
 - crates.list - Permission node responsible for listing crates, crate types and rewards.
 
-# Support:
+### Support:
 To report any bugs, or to make a feature request please use github issues.
 
-# Planned Features:
+### Planned Features:
 - More animation variations
 - More data saving variations
 - Command rewards
