@@ -105,7 +105,7 @@ public class HelpCommand extends Command {
 
         for (int i = 0; i < pages.size(); i++) {
             List<String> page = pages.get(i);
-            page.add(0, "§e.*.-----_-----{ §3Crates §e}-----_-----.*.");
+            page.add(0, "§e.*.-----_-----{ §3Crates Enhanced §e}-----_-----.*.");
             page.add("§e.*.-----_-----{ §3Help " + (i + 1) + " §e}-----_-----.*.");
             result.add(page.toArray(new String[0]));
         }

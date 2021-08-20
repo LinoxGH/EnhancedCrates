@@ -8,7 +8,7 @@ import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
 
-import me.linoxgh.cratesenhanced.Crates;
+import me.linoxgh.cratesenhanced.CratesEnhanced;
 import me.linoxgh.cratesenhanced.Data.Crate;
 import me.linoxgh.cratesenhanced.Data.CrateStorage;
 import me.linoxgh.cratesenhanced.Data.CrateType;
@@ -23,7 +23,7 @@ public class IOManager {
     private final File cratesFile;
     private final File crateTypesFile;
 
-    public IOManager(@NotNull Crates plugin, @NotNull CrateStorage crates) {
+    public IOManager(@NotNull CratesEnhanced plugin, @NotNull CrateStorage crates) {
         this.crates = crates;
 
         cratesFile = new File(plugin.getDataFolder().getPath() + File.separator + "crates.dat");

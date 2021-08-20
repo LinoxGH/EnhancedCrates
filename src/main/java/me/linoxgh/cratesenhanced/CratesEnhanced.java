@@ -10,7 +10,7 @@ import org.bstats.bukkit.Metrics;
 import org.bukkit.configuration.serialization.ConfigurationSerialization;
 import org.bukkit.plugin.java.JavaPlugin;
 
-public final class Crates extends JavaPlugin {
+public class CratesEnhanced extends JavaPlugin {
 
     private final CrateStorage crateStorage = new CrateStorage();
     private IOManager ioManager;

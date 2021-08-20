@@ -71,7 +71,7 @@ public class ListCommand extends Command {
                     sender.sendMessage("§4Could not find the specified crate type.");
                     return true;
                 }
-                sender.sendMessage("§e.*.-----_-----{ §3Crates §e}-----_-----.*.");
+                sender.sendMessage("§e.*.-----_-----{ §3Crates Enhanced §e}-----_-----.*.");
                 sender.sendMessage("§9Reward §e- §9Weight");
                 for (Map.Entry<ItemStack, Integer> entry : crate.getWeights().entrySet()) {
                     ItemStack drop = entry.getKey();

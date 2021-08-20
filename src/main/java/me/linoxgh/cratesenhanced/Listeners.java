@@ -28,11 +28,11 @@ import org.bukkit.inventory.ItemStack;
 import org.jetbrains.annotations.NotNull;
 
 public class Listeners implements Listener {
-    private final Crates plugin;
+    private final CratesEnhanced plugin;
     private final CrateStorage crates;
     private final List<BlockPosition> cooldowns;
 
-    Listeners(@NotNull Crates plugin, @NotNull CrateStorage crates) {
+    Listeners(@NotNull CratesEnhanced plugin, @NotNull CrateStorage crates) {
         this.plugin = plugin;
         this.crates = crates;
         cooldowns = new ArrayList<>();
