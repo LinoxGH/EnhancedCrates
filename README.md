@@ -1,2 +1,2 @@
-# Crates
-The better solution for your Pay2Win servers!
+# Crates Enhanced
+The enhanced solution for your Pay2Win servers!
