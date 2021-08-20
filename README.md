@@ -5,12 +5,19 @@
 ### Description:
 Crates Enhanced is a new Crates plugin that supports custom items, fully configurable crate types and multiple crates for each type.
 
-Here is how the plugin works:
+Here is how the plugin works: <br/>
 A crate's possible rewards and the key to unlock it are defined by its type.
 An unlimited amount of types can be created through ingame commands and an unlimited amount of crates can be assigned to a single type.
 The chance to get a specific reward is determined by its weight. The rewards with more weight are more likely to be earned.
 
 A crate doesn't have to be a chest or an enderchest block, it may very well be a grass block, allowing you to use custom crate block textures via resource packs.
+
+### How To Use:
+First of all prepare yourself an example key item, can be a custom item or a plain old diamond. <br/>
+Now use `/crates type add <crate-type>` to create your crate type. <br/>
+Now we need to add some rewards to this crate type. Get yourself some items that you think would be neat. And for each of them hold the item and use `/crates edit <crate-type> reward add <weight>`. <br/>
+Prepare yourself a nice crate area, you should also put a block on where you want the crate to be, plugin does not place any blocks. Then run `/crates create <crate-name> <x> <y> <z> <world> <crate-type>`. <br/>
+All done! Now you can right click to open the crate and get a random reward.
 
 ### Features:
 - Custom Item support
