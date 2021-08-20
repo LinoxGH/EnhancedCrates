@@ -1,6 +1,6 @@
 # Crates Enhanced
 
-# WARNING! This plugin only works with paper.
+## WARNING! This plugin only works with paper.
 
 ### Description:
 Crates Enhanced is a new Crates plugin that supports custom items, fully configurable crate types and multiple crates for each type.
