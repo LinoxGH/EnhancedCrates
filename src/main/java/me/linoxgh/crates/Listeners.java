@@ -1,32 +1,49 @@
 package me.linoxgh.crates;
 
-import java.util.Map;
+import java.util.ArrayList;
+import java.util.List;
 
 import me.linoxgh.crates.Data.BlockPosition;
 import me.linoxgh.crates.Data.Crate;
 import me.linoxgh.crates.Data.CrateStorage;
 import me.linoxgh.crates.Data.CrateType;
 import org.bukkit.Bukkit;
+import org.bukkit.Effect;
+import org.bukkit.Location;
+import org.bukkit.Particle;
+import org.bukkit.Sound;
 import org.bukkit.block.Block;
+import org.bukkit.entity.EntityType;
+import org.bukkit.entity.Item;
 import org.bukkit.entity.Player;
+import org.bukkit.event.Event;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.block.Action;
+import org.bukkit.event.block.BlockBreakEvent;
+import org.bukkit.event.entity.CreatureSpawnEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.inventory.EquipmentSlot;
 import org.bukkit.inventory.ItemStack;
 import org.jetbrains.annotations.NotNull;
 
 public class Listeners implements Listener {
+    private final Crates plugin;
     private final CrateStorage crates;
+    private final List<BlockPosition> cooldowns;
 
     Listeners(@NotNull Crates plugin, @NotNull CrateStorage crates) {
+        this.plugin = plugin;
         this.crates = crates;
+        cooldowns = new ArrayList<>();
         Bukkit.getPluginManager().registerEvents(this, plugin);
     }
 
     @EventHandler
     public void onInteract(PlayerInteractEvent e) {
+        if (e.useInteractedBlock() == Event.Result.DENY) return;
+        if (e.useItemInHand() == Event.Result.DENY) return;
+
         if (e.getAction() != Action.RIGHT_CLICK_BLOCK) return;
         if (e.getHand() != EquipmentSlot.HAND) return;
 
@@ -34,7 +51,10 @@ public class Listeners implements Listener {
         Block b = e.getClickedBlock();
         if (b == null) return;
 
-        Crate crate = crates.getCrate(new BlockPosition(b.getX(), b.getY(), b.getZ(), b.getWorld().getName()));
+        BlockPosition pos = new BlockPosition(b.getX(), b.getY(), b.getZ(), b.getWorld().getName());
+        if (cooldowns.contains(pos)) return;
+
+        Crate crate = crates.getCrate(pos);
         if (crate == null) return;
 
         CrateType type = crates.getCrateType(crate.getCrateType());
@@ -52,12 +72,68 @@ public class Listeners implements Listener {
             ItemStack drop = type.getRandomDrop();
             if (drop == null) return;
 
-            heldItem.setAmount(newAmount);
-            for (Map.Entry<Integer, ItemStack> entry : p.getInventory().addItem(drop).entrySet()) {
-                p.getWorld().dropItem(p.getLocation(), entry.getValue());
-            }
+            cooldowns.add(pos);
+            playCrateAnimations(crate, p, drop, heldItem, newAmount);
 
-            e.setCancelled(true);
+            e.setUseInteractedBlock(Event.Result.DENY);
+            e.setUseItemInHand(Event.Result.DENY);
         }
+    }
+
+    @EventHandler
+    public void onBreak(BlockBreakEvent e) {
+        if (e.isCancelled()) return;
+
+        Player p = e.getPlayer();
+        Block b = e.getBlock();
+
+        Crate crate = crates.getCrate(new BlockPosition(b.getX(), b.getY(), b.getZ(), b.getWorld().getName()));
+        if (crate == null) return;
+
+        if (!p.hasPermission("crates.delete")) return;
+
+        crates.removeCrate(crate.getName());
+        p.sendMessage("§aSuccessfully removed the crate.");
+    }
+
+    private void playCrateAnimations(@NotNull Crate crate, @NotNull Player p, @NotNull ItemStack drop, @NotNull ItemStack heldItem, int amount) {
+        heldItem.setAmount(amount);
+
+        BlockPosition pos = crate.getPos();
+        Location loc = new Location(Bukkit.getWorld(pos.getWorld()), pos.getX(), pos.getY(), pos.getZ());
+
+        Bukkit.getScheduler().scheduleSyncDelayedTask(plugin, () -> {
+            loc.getWorld().playEffect(loc, Effect.MOBSPAWNER_FLAMES, 1);
+            loc.getWorld().playSound(loc, Sound.BLOCK_WOODEN_BUTTON_CLICK_ON, 1F, 1F);
+
+            Bukkit.getScheduler().scheduleSyncDelayedTask(plugin, () -> {
+                loc.getWorld().playEffect(loc, Effect.MOBSPAWNER_FLAMES, 1);
+                loc.getWorld().playSound(loc, Sound.BLOCK_WOODEN_BUTTON_CLICK_ON, 2F, 1F);
+
+                Bukkit.getScheduler().scheduleSyncDelayedTask(plugin, () -> {
+                    loc.getWorld().playEffect(loc, Effect.MOBSPAWNER_FLAMES, 1);
+                    loc.getWorld().playSound(loc, Sound.BLOCK_WOODEN_BUTTON_CLICK_ON, 3F, 1F);
+
+                    Bukkit.getScheduler().scheduleSyncDelayedTask(plugin, () -> {
+                        loc.getWorld().spawnParticle(Particle.EXPLOSION_NORMAL, loc, 1);
+                        loc.getWorld().playSound(loc, Sound.ENTITY_ARROW_HIT_PLAYER, 1F, 1F);
+
+                        loc.getWorld().spawnEntity(
+                                loc.set(loc.getX(), loc.getY() + 0.5D, loc.getZ()),
+                                EntityType.DROPPED_ITEM,
+                                CreatureSpawnEvent.SpawnReason.CUSTOM,
+                                (entity) -> {
+                                    Item item = (Item) entity;
+                                    item.setOwner(p.getUniqueId());
+                                    item.setCanMobPickup(false);
+                                    item.setCanPlayerPickup(true);
+                                    item.setWillAge(false);
+                                    item.setPickupDelay(20);
+                                }
+                        );
+                    }, 20L);
+                }, 20L);
+            }, 20L);
+        }, 20L);
     }
 }

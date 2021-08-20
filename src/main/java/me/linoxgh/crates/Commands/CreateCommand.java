@@ -47,7 +47,7 @@ public class CreateCommand extends Command {
                 return true;
             }
 
-            Crate crate = new Crate(pos, args[6]);
+            Crate crate = new Crate(args[1], pos, args[6]);
             crates.addCrate(args[1], crate);
 
             sender.sendMessage("§aSuccessfully created a crate.");

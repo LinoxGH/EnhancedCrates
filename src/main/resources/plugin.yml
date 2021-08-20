@@ -1,13 +1,13 @@
-name: Crates
+name: CratesEnhanced
 version: ${project.version}
 main: me.linoxgh.crates.Crates
 api-version: 1.17
 authors: [ LinoxGH ]
-description: The better solution for your Pay2Win servers!
+description: The enhanced solution for your Pay2Win servers!
 
 commands:
   crates:
-    description: "Main command for Crates plugin."
+    description: "Main command for Crates Enhanced plugin."
     usage: "/crates help"
     permission: crates.main
     permission-message: "§4You do not have enough permission to use this command."
@@ -15,7 +15,7 @@ commands:
 
 permissions:
   crates.*:
-    description: "Master permission node for whole plugin."
+    description: "Master permission node for the whole plugin."
     default: op
     children: [ crates.use.*, crates.admin ]
   crates.use.*:

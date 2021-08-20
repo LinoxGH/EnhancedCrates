@@ -39,14 +39,15 @@ public class CrateType implements ConfigurationSerializable {
 
     public void addDrop(int weight, @NotNull ItemStack drop) {
         drops.put((drops.isEmpty() ? 0 : drops.lastKey()) + weight, drop.clone());
+        weights.put(drop, weight);
     }
     public void deleteDrop(@NotNull ItemStack drop) {
         TreeMap<Integer, ItemStack> newDrops = new TreeMap<>();
-        drop = drop.clone();
+        ItemStack clone = drop.clone();
 
         int key = 0;
         for (Map.Entry<ItemStack, Integer> entry : weights.entrySet()) {
-            if (entry.getKey().equals(drop)) {
+            if (entry.getKey().equals(clone)) {
                 weights.remove(entry.getKey());
                 continue;
             }
@@ -58,7 +59,7 @@ public class CrateType implements ConfigurationSerializable {
     }
 
     public @NotNull ItemStack getKey() {
-        return key;
+        return key.clone();
     }
     public void setKey(@NotNull ItemStack key) {
         this.key = key.clone();
