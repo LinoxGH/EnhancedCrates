@@ -1,6 +1,6 @@
 name: CratesEnhanced
 version: ${project.version}
-main: me.linoxgh.crates.Crates
+main: me.linoxgh.cratesenhanced.CratesEnhanced
 api-version: 1.16
 authors: [ LinoxGH ]
 description: The enhanced solution for your Pay2Win servers!

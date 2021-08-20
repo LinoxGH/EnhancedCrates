@@ -118,7 +118,7 @@ public class Listeners implements Listener {
                         loc.getWorld().playSound(loc, Sound.ENTITY_ARROW_HIT_PLAYER, 1F, 1F);
 
                         loc.getWorld().spawnEntity(
-                                loc.set(loc.getX(), loc.getY() + 0.5D, loc.getZ()),
+                                loc.set(loc.getX(), loc.getY() + 1D, loc.getZ()),
                                 EntityType.DROPPED_ITEM,
                                 CreatureSpawnEvent.SpawnReason.CUSTOM,
                                 (entity) -> {
