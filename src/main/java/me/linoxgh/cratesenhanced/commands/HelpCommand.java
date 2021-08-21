@@ -1,4 +1,4 @@
-package me.linoxgh.cratesenhanced.Commands;
+package me.linoxgh.cratesenhanced.commands;
 
 import java.util.ArrayList;
 import java.util.HashMap;

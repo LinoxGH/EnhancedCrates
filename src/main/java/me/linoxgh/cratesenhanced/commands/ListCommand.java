@@ -1,11 +1,11 @@
-package me.linoxgh.cratesenhanced.Commands;
+package me.linoxgh.cratesenhanced.commands;
 
 import java.util.Map;
 
-import me.linoxgh.cratesenhanced.Data.BlockPosition;
-import me.linoxgh.cratesenhanced.Data.Crate;
-import me.linoxgh.cratesenhanced.Data.CrateStorage;
-import me.linoxgh.cratesenhanced.Data.CrateType;
+import me.linoxgh.cratesenhanced.data.BlockPosition;
+import me.linoxgh.cratesenhanced.data.Crate;
+import me.linoxgh.cratesenhanced.data.CrateStorage;
+import me.linoxgh.cratesenhanced.data.CrateType;
 import net.kyori.adventure.text.Component;
 import org.bukkit.command.CommandSender;
 import org.bukkit.inventory.ItemStack;

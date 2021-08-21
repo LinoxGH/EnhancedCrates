@@ -1,4 +1,4 @@
-package me.linoxgh.cratesenhanced.Commands;
+package me.linoxgh.cratesenhanced.commands;
 
 import org.bukkit.command.CommandSender;
 import org.jetbrains.annotations.NotNull;

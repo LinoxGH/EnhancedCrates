@@ -1,10 +1,10 @@
-package me.linoxgh.cratesenhanced.Commands;
+package me.linoxgh.cratesenhanced.commands;
 
 import java.util.HashMap;
 import java.util.Map;
 
-import me.linoxgh.cratesenhanced.Data.CrateStorage;
-import me.linoxgh.cratesenhanced.Data.CrateType;
+import me.linoxgh.cratesenhanced.data.CrateStorage;
+import me.linoxgh.cratesenhanced.data.CrateType;
 import org.bukkit.Bukkit;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;

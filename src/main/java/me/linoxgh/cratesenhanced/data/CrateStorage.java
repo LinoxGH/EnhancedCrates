@@ -1,4 +1,4 @@
-package me.linoxgh.cratesenhanced.Data;
+package me.linoxgh.cratesenhanced.data;
 
 import java.util.HashMap;
 import java.util.Map;
