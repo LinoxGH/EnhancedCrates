@@ -2,16 +2,19 @@ package me.linoxgh.cratesenhanced.commands;
 
 import me.linoxgh.cratesenhanced.data.CrateStorage;
 import me.linoxgh.cratesenhanced.data.CrateType;
+import me.linoxgh.cratesenhanced.gui.GUITracker;
+import me.linoxgh.cratesenhanced.gui.MenuType;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
-import org.bukkit.inventory.ItemStack;
 import org.jetbrains.annotations.NotNull;
 
 public class EditCommand extends Command {
     private final CrateStorage crates;
+    private final GUITracker guiTracker;
 
-    EditCommand(@NotNull CrateStorage crates) {
+    EditCommand(@NotNull CrateStorage crates, @NotNull GUITracker guiTracker) {
         this.crates = crates;
+        this.guiTracker = guiTracker;
     }
 
     @Override
@@ -32,43 +35,8 @@ public class EditCommand extends Command {
             p.sendMessage("§4Could not find the specified crate type.");
             return true;
         }
-        ItemStack heldItem = p.getInventory().getItemInMainHand();
-
-        // Removing a reward or changing the key.
-        if (args.length == 4 && (args[2].equals("reward") || args[2].equals("key"))) {
-            if (args[2].equals("reward") && args[3].equals("remove")) {
-                crate.deleteDrop(heldItem);
-                p.sendMessage("§aSuccessfully removed the held reward from this crate type");
-                return true;
-
-            } else if (args[2].equals("key") && args[3].equals("set")) {
-                crate.setKey(heldItem);
-                p.sendMessage("§aSuccessfully changed the key of this crate type.");
-                return true;
-
-            }
-        // Adding/Setting weight of a reward.
-        } else if (args.length == 5 && args[2].equals("reward")) {
-            int weight;
-            try {
-                weight = Integer.parseInt(args[4]);
-            } catch (NumberFormatException ignored) {
-                p.sendMessage("§4Please enter a valid reward weight.");
-                return true;
-            }
-
-            if (args[3].equals("add")) {
-                crate.addDrop(weight, heldItem);
-                p.sendMessage("§aSuccessfully added a reward to this crate type.");
-                return true;
-
-            } else if (args[3].equals("set-weight")) {
-                crate.deleteDrop(heldItem);
-                crate.addDrop(weight, heldItem);
-                p.sendMessage("§aSuccessfully changed the weight of this reward.");
-                return true;
-            }
-        }
-        return false;
+        p.openInventory(crate.getMenu().getInv());
+        guiTracker.addToMenuTracker(p.getUniqueId(), MenuType.CRATE_TYPE);
+        return true;
     }
 }

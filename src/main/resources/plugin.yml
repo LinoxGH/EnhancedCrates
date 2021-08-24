@@ -5,6 +5,8 @@ api-version: 1.16
 authors: [ LinoxGH ]
 description: The enhanced solution for your Pay2Win servers!
 
+softdepend: [ Vault ]
+
 commands:
   crates:
     description: "Main command for Crates Enhanced plugin."

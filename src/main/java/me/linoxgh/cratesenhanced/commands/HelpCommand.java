@@ -36,13 +36,6 @@ public class HelpCommand extends Command {
             messages.add("§e- §aShows the help pages.");
             messages.add(" ");
         }
-        if (sender.hasPermission("crates.list")) {
-            messages.add("§6/crates list crates|types");
-            messages.add("§e- §aLists down all of the crates and their types.");
-            messages.add("§6/crates list rewards §9<crate-type>");
-            messages.add("§e- §aLists down all of the rewards for the specified crate type.");
-            messages.add(" ");
-        }
         if (sender.hasPermission("crates.create")) {
             messages.add("§6/crates create §9<crate-name> <x> <y> <z> <world> <crate-type>");
             messages.add("§e- §aCreates a new crate.");
@@ -60,17 +53,8 @@ public class HelpCommand extends Command {
             messages.add(" ");
         }
         if (sender.hasPermission("crates.edit")) {
-            messages.add("§6/crates edit §9<crate-type> §6reward add|set-weight §9<weight>");
-            messages.add("§e- §aAdds a new reward to the crate type.");
-            messages.add("§e- §aYou can also use this to change the weight of a reward.");
-            messages.add("§6/crates edit §9<crate-type> §6reward remove");
-            messages.add("§e- §aRemoves a reward from the crate type.");
-            messages.add("§e- §4You must hold the reward item in your hand.");
-            messages.add(" ");
-
-            messages.add("§6/crates edit §9<crate-type> §6key set");
-            messages.add("§e- §aChanges the key of the crate type.");
-            messages.add("§e- §4You most hold the key item in your hand.");
+            messages.add("§6/crates edit §9<crate-type>");
+            messages.add("§e- §aOpens a gui to edit the crate type.");
             messages.add(" ");
         }
         if (sender.hasPermission("crates.give")) {

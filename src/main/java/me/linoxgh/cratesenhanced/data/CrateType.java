@@ -1,61 +1,76 @@
 package me.linoxgh.cratesenhanced.data;
 
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.TreeMap;
 import java.util.concurrent.ThreadLocalRandom;
 
+import me.linoxgh.cratesenhanced.data.rewards.Reward;
+import me.linoxgh.cratesenhanced.gui.CrateTypeMenu;
 import org.bukkit.configuration.serialization.ConfigurationSerializable;
 import org.bukkit.inventory.ItemStack;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 public class CrateType implements ConfigurationSerializable {
-    private TreeMap<Integer, ItemStack> drops;
-    private final HashMap<ItemStack, Integer> weights;
+    private final String name;
+    private TreeMap<Integer, Reward<?>> rewards;
+    private final List<Reward<?>> weights;
     private ItemStack key;
+    private final CrateTypeMenu menu;
 
-    public CrateType(@NotNull ItemStack key) {
+    public CrateType(@NotNull String name, @NotNull ItemStack key) {
+        this.name = name;
         this.key = key;
 
-        drops = new TreeMap<>();
-        weights = new HashMap<>();
+        rewards = new TreeMap<>();
+        weights = new ArrayList<>();
+
+        menu = new CrateTypeMenu(this);
     }
 
     public CrateType(@NotNull Map<String, Object> data) {
+        this.name = (String) data.get("name");
         this.key = (ItemStack) data.get("key");
-        this.weights = (HashMap<ItemStack, Integer>) data.get("weights");
-        this.drops = (TreeMap<Integer, ItemStack>) data.get("drops");
+
+        this.weights = (List<Reward<?>>) data.get("weights");
+        this.rewards = (TreeMap<Integer, Reward<?>>) data.get("drops");
+
+        menu = new CrateTypeMenu(this);
     }
 
-    public @NotNull HashMap<ItemStack, Integer> getWeights() {
+    public @NotNull String getName() {
+        return name;
+    }
+    public @NotNull List<Reward<?>> getWeights() {
         return weights;
     }
-    public @Nullable ItemStack getRandomDrop() {
-        if (drops.isEmpty()) return null;
-        int random = ThreadLocalRandom.current().nextInt(drops.lastKey());
-        return drops.higherEntry(random).getValue().clone();
+    public @Nullable Reward<?> getRandomReward() {
+        if (rewards.isEmpty()) return null;
+        int random = ThreadLocalRandom.current().nextInt(rewards.lastKey());
+        return rewards.higherEntry(random).getValue();
+    }
+    public @NotNull CrateTypeMenu getMenu() {
+        return menu;
     }
 
-    public void addDrop(int weight, @NotNull ItemStack drop) {
-        drops.put((drops.isEmpty() ? 0 : drops.lastKey()) + weight, drop.clone());
-        weights.put(drop, weight);
+    public void addReward(int weight, @NotNull Reward reward) {
+        rewards.put((rewards.isEmpty() ? 0 : rewards.lastKey()) + weight, reward);
+        weights.add(reward);
     }
-    public void deleteDrop(@NotNull ItemStack drop) {
-        TreeMap<Integer, ItemStack> newDrops = new TreeMap<>();
-        ItemStack clone = drop.clone();
+    public void removeReward(@NotNull Reward<?> reward) {
+        TreeMap<Integer, Reward<?>> newRewards = new TreeMap<>();
+        weights.remove(reward);
 
         int key = 0;
-        for (Map.Entry<ItemStack, Integer> entry : weights.entrySet()) {
-            if (entry.getKey().equals(clone)) {
-                weights.remove(entry.getKey());
-                continue;
-            }
-            key += entry.getValue();
-            newDrops.put(key, entry.getKey());
+        for (Reward<?> entry : weights) {
+            key += entry.getWeight();
+            newRewards.put(key, entry);
         }
 
-        this.drops = newDrops;
+        this.rewards = newRewards;
     }
 
     public @NotNull ItemStack getKey() {
@@ -68,9 +83,10 @@ public class CrateType implements ConfigurationSerializable {
     @Override
     public @NotNull Map<String, Object> serialize() {
         HashMap<String, Object> result = new HashMap<>();
+        result.put("name", name);
         result.put("key", key);
         result.put("weights", weights);
-        result.put("drops", drops);
+        result.put("rewards", rewards);
         return result;
     }
 }

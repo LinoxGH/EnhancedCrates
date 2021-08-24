@@ -40,7 +40,7 @@ public class TypeCommand extends Command {
                 return true;
             }
 
-            crates.addCrateType(args[2], new CrateType(heldItem));
+            crates.addCrateType(args[2], new CrateType(args[2], heldItem));
             p.sendMessage("§aSuccessfully added a new crate type.");
             return true;
 

@@ -1,6 +1,7 @@
 package me.linoxgh.cratesenhanced.commands;
 
 import me.linoxgh.cratesenhanced.data.CrateStorage;
+import me.linoxgh.cratesenhanced.gui.GUITracker;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
@@ -16,12 +17,12 @@ public class MainCommand implements CommandExecutor {
     private final GiveCommand give;
     private final TypeCommand type;
 
-    public MainCommand(@NotNull CrateStorage crates) {
+    public MainCommand(@NotNull CrateStorage crates, @NotNull GUITracker guiTracker) {
         this.help = new HelpCommand();
-        this.list = new ListCommand(crates);
+        this.list = new ListCommand(crates, guiTracker);
         this.create = new CreateCommand(crates);
         this.delete = new DeleteCommand(crates);
-        this.edit = new EditCommand(crates);
+        this.edit = new EditCommand(crates, guiTracker);
         this.give = new GiveCommand(crates);
         this.type = new TypeCommand(crates);
     }

@@ -1,12 +1,15 @@
 package me.linoxgh.cratesenhanced;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.util.HashSet;
+import java.util.Set;
 
 import me.linoxgh.cratesenhanced.data.BlockPosition;
 import me.linoxgh.cratesenhanced.data.Crate;
 import me.linoxgh.cratesenhanced.data.CrateStorage;
 import me.linoxgh.cratesenhanced.data.CrateType;
+import me.linoxgh.cratesenhanced.data.rewards.Reward;
+import me.linoxgh.cratesenhanced.gui.ListRewardMenu;
+import net.milkbowl.vault.economy.Economy;
 import org.bukkit.Bukkit;
 import org.bukkit.Effect;
 import org.bukkit.Location;
@@ -21,21 +24,22 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.block.Action;
 import org.bukkit.event.block.BlockBreakEvent;
+import org.bukkit.event.block.BlockPlaceEvent;
 import org.bukkit.event.entity.CreatureSpawnEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.inventory.EquipmentSlot;
 import org.bukkit.inventory.ItemStack;
 import org.jetbrains.annotations.NotNull;
 
-public class Listeners implements Listener {
+public class CrateListeners implements Listener {
     private final CratesEnhanced plugin;
     private final CrateStorage crates;
-    private final List<BlockPosition> cooldowns;
+    private final Set<BlockPosition> cooldowns;
 
-    Listeners(@NotNull CratesEnhanced plugin, @NotNull CrateStorage crates) {
+    CrateListeners(@NotNull CratesEnhanced plugin, @NotNull CrateStorage crates) {
         this.plugin = plugin;
         this.crates = crates;
-        cooldowns = new ArrayList<>();
+        cooldowns = new HashSet<>();
         Bukkit.getPluginManager().registerEvents(this, plugin);
     }
 
@@ -64,19 +68,20 @@ public class Listeners implements Listener {
         if (!p.hasPermission("crates.use.*") && !p.hasPermission("crates.use." + crate.getCrateType())) return;
 
         ItemStack heldItem = e.getItem();
-        if (heldItem == null) return;
+        if (heldItem == null || !heldItem.isSimilar(type.getKey())) {
+            ListRewardMenu menu = new ListRewardMenu(type);
+            p.openInventory(menu.getInventories()[0]);
 
-        if (heldItem.isSimilar(type.getKey())) {
+        } else {
             int newAmount = heldItem.getAmount() - type.getKey().getAmount();
             if (newAmount < 0) return;
 
-            ItemStack drop = type.getRandomDrop();
-            if (drop == null) return;
+            Reward<?> reward = type.getRandomReward();
+            if (reward == null) return;
 
-            if (cooldowns.contains(pos)) return;
+            if (!cooldowns.add(pos)) return;
 
-            cooldowns.add(pos);
-            playCrateAnimations(crate, p, drop, heldItem, newAmount);
+            playCrateAnimations(crate, p, reward, heldItem, newAmount);
         }
     }
 
@@ -96,7 +101,17 @@ public class Listeners implements Listener {
         p.sendMessage("§aSuccessfully removed the crate.");
     }
 
-    private void playCrateAnimations(@NotNull Crate crate, @NotNull Player p, @NotNull ItemStack drop, @NotNull ItemStack heldItem, int amount) {
+    @EventHandler
+    public void onPlace(BlockPlaceEvent e) {
+        for (CrateType type : crates.getCrateTypes().values()) {
+            if (e.getItemInHand().isSimilar(type.getKey())) {
+                e.setCancelled(true);
+                return;
+            }
+        }
+    }
+
+    private void playCrateAnimations(@NotNull Crate crate, @NotNull Player p, @NotNull Reward<?> reward, @NotNull ItemStack heldItem, int amount) {
         heldItem.setAmount(amount);
 
         BlockPosition pos = crate.getPos();
@@ -121,20 +136,50 @@ public class Listeners implements Listener {
                         loc.getWorld().spawnParticle(Particle.EXPLOSION_LARGE, topLoc, 1);
                         loc.getWorld().playSound(loc, Sound.ENTITY_ARROW_HIT_PLAYER, 1F, 1F);
 
-                        loc.getWorld().spawnEntity(
-                                topLoc,
-                                EntityType.DROPPED_ITEM,
-                                CreatureSpawnEvent.SpawnReason.CUSTOM,
-                                (entity) -> {
-                                    Item item = (Item) entity;
-                                    item.setOwner(p.getUniqueId());
-                                    item.setCanMobPickup(false);
-                                    item.setCanPlayerPickup(true);
-                                    item.setWillAge(true);
-                                    item.setPickupDelay(20);
-                                    item.setItemStack(drop);
+                        switch (reward.getRewardType()) {
+                            case ITEM:
+                                loc.getWorld().spawnEntity(
+                                        topLoc,
+                                        EntityType.DROPPED_ITEM,
+                                        CreatureSpawnEvent.SpawnReason.CUSTOM,
+                                        (entity) -> {
+                                            Item item = (Item) entity;
+                                            item.setOwner(p.getUniqueId());
+                                            item.setCanMobPickup(false);
+                                            item.setCanPlayerPickup(true);
+                                            item.setWillAge(true);
+                                            item.setPickupDelay(20);
+                                            item.setItemStack((ItemStack) reward.getReward());
+                                        }
+                                );
+                                break;
+                            case ITEM_GROUP:
+                                for (ItemStack drop : ((ItemStack[]) reward.getReward())) {
+                                    loc.getWorld().spawnEntity(
+                                            topLoc,
+                                            EntityType.DROPPED_ITEM,
+                                            CreatureSpawnEvent.SpawnReason.CUSTOM,
+                                            (entity) -> {
+                                                Item item = (Item) entity;
+                                                item.setOwner(p.getUniqueId());
+                                                item.setCanMobPickup(false);
+                                                item.setCanPlayerPickup(true);
+                                                item.setWillAge(true);
+                                                item.setPickupDelay(20);
+                                                item.setItemStack(drop);
+                                            }
+                                    );
                                 }
-                        );
+                                break;
+                            case COMMAND:
+                                Bukkit.dispatchCommand(Bukkit.getConsoleSender(), (String) reward.getReward());
+                                break;
+                            case MONEY:
+                                Economy econ = CratesEnhanced.getEcon();
+                                if (econ == null) break;
+                                econ.depositPlayer(p, (double) reward.getReward());
+                                break;
+                        }
                         cooldowns.remove(crate.getPos());
                     }, 20L);
                 }, 20L);
