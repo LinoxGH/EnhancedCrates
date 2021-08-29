@@ -70,6 +70,7 @@ public class CrateListeners implements Listener {
         ItemStack heldItem = e.getItem();
         if (heldItem == null || !heldItem.isSimilar(type.getKey())) {
             ListRewardMenu menu = new ListRewardMenu(type);
+            if (menu.getInventories().length == 0) return;
             p.openInventory(menu.getInventories()[0]);
 
         } else {

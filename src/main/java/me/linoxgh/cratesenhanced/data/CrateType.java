@@ -36,7 +36,7 @@ public class CrateType implements ConfigurationSerializable {
         this.key = (ItemStack) data.get("key");
 
         this.weights = (List<Reward<?>>) data.get("weights");
-        this.rewards = (TreeMap<Integer, Reward<?>>) data.get("drops");
+        this.rewards = (TreeMap<Integer, Reward<?>>) data.get("rewards");
 
         menu = new CrateTypeMenu(this);
     }
@@ -48,7 +48,7 @@ public class CrateType implements ConfigurationSerializable {
         return weights;
     }
     public @Nullable Reward<?> getRandomReward() {
-        if (rewards.isEmpty()) return null;
+        if (rewards == null || rewards.isEmpty()) return null;
         int random = ThreadLocalRandom.current().nextInt(rewards.lastKey());
         return rewards.higherEntry(random).getValue();
     }

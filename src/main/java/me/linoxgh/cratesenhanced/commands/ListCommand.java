@@ -10,6 +10,7 @@ import me.linoxgh.cratesenhanced.gui.GUITracker;
 import me.linoxgh.cratesenhanced.gui.ListRewardMenu;
 import me.linoxgh.cratesenhanced.gui.MenuType;
 import net.kyori.adventure.text.Component;
+import net.kyori.adventure.text.event.ClickEvent;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
@@ -71,6 +72,7 @@ public class ListCommand extends Command {
                     p.sendMessage(Component.text("§e- §f" + entry.getKey() + " §e- §f")
                             .append(key.displayName().hoverEvent(key.asHoverEvent()))
                             .append(Component.text(" §6x§9" + key.getAmount()))
+                            .clickEvent(ClickEvent.runCommand("/crate give " + p.getName() + " key " + entry.getKey()))
                     );
                 }
                 return true;
@@ -84,6 +86,7 @@ public class ListCommand extends Command {
                 }
 
                 ListRewardMenu list = new ListRewardMenu(type);
+                if (list.getInventories().length == 0) return true;
                 p.openInventory(list.getInventories()[0]);
                 guiTracker.addToMenuTracker(p.getUniqueId(), MenuType.LIST_REWARD);
                 guiTracker.addToListTracker(p.getUniqueId(), list);

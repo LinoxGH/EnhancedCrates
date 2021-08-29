@@ -56,6 +56,7 @@ public interface Reward<T> extends ConfigurationSerializable {
     default @NotNull Map<String, Object> serialize() {
         HashMap<String, Object> result = new HashMap<>();
         result.put("reward", getReward());
+        result.put("weight", getWeight());
         return result;
     }
 }

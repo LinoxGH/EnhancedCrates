@@ -32,7 +32,7 @@ public class HelpCommand extends Command {
 
         List<String> messages = new ArrayList<>();
         if (sender.hasPermission("crates.main")) {
-            messages.add("§6/crates help §3[page]");
+            messages.add("§6/crates help §9[page]");
             messages.add("§e- §aShows the help pages.");
             messages.add(" ");
         }

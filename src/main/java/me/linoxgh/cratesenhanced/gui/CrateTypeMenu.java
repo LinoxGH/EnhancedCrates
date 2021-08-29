@@ -39,7 +39,7 @@ public class CrateTypeMenu {
     public void populate() {
         ItemStack border = new ItemStack(Material.GRAY_STAINED_GLASS_PANE);
         ItemMeta borderMeta = border.getItemMeta();
-        borderMeta.setLocalizedName(" ");
+        borderMeta.displayName(Component.text(" "));
         border.setItemMeta(borderMeta);
         for (int slot : BORDER_SLOTS) {
             inv.setItem(slot, border);
@@ -47,19 +47,19 @@ public class CrateTypeMenu {
 
         ItemStack addCommandReward = new ItemStack(Material.WRITABLE_BOOK);
         ItemMeta addCommandRewardMeta = addCommandReward.getItemMeta();
-        addCommandRewardMeta.setLocalizedName("§bPress to add a command reward");
+        addCommandRewardMeta.displayName(Component.text("§bPress to add a command reward"));
         addCommandReward.setItemMeta(addCommandRewardMeta);
         inv.setItem(11, addCommandReward);
 
         ItemStack addItemReward = new ItemStack(Material.DIAMOND);
         ItemMeta addItemRewardMeta = addItemReward.getItemMeta();
-        addItemRewardMeta.setLocalizedName("§bPress to add an item stack reward");
+        addItemRewardMeta.displayName(Component.text("§bPress to add an item stack reward"));
         addItemReward.setItemMeta(addItemRewardMeta);
         inv.setItem(12, addItemReward);
 
         ItemStack addMoneyReward = new ItemStack(Material.GOLD_INGOT);
         ItemMeta addMoneyRewardMeta = addMoneyReward.getItemMeta();
-        addMoneyRewardMeta.setLocalizedName("§bPress to add a money reward");
+        addMoneyRewardMeta.displayName(Component.text("§bPress to add a money reward"));
         List<Component> addMoneyRewardLore = new ArrayList<>();
         addMoneyRewardLore.add(Component.text("§cThis requires Vault."));
         addMoneyReward.lore(addMoneyRewardLore);
@@ -68,13 +68,13 @@ public class CrateTypeMenu {
 
         ItemStack addItemGroupReward = new ItemStack(Material.DIAMOND_BLOCK);
         ItemMeta addItemGroupRewardMeta = addItemGroupReward.getItemMeta();
-        addItemGroupRewardMeta.setLocalizedName("§bPress to add a group of item stacks as reward");
+        addItemGroupRewardMeta.displayName(Component.text("§bPress to add a group of item stacks as reward"));
         addItemGroupReward.setItemMeta(addItemGroupRewardMeta);
         inv.setItem(21, addItemGroupReward);
 
         ItemStack rewardList = new ItemStack(Material.BOOK);
         ItemMeta rewardListMeta = rewardList.getItemMeta();
-        rewardListMeta.setLocalizedName("§bPress to see a list of possible rewards");
+        rewardListMeta.displayName(Component.text("§bPress to see a list of possible rewards"));
         rewardList.setItemMeta(rewardListMeta);
         inv.setItem(15, rewardList);
 

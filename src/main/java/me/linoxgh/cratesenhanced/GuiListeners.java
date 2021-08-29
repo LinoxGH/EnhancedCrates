@@ -19,6 +19,8 @@ import me.linoxgh.cratesenhanced.gui.CrateTypeMenu;
 import me.linoxgh.cratesenhanced.gui.GUITracker;
 import me.linoxgh.cratesenhanced.gui.ListRewardMenu;
 import me.linoxgh.cratesenhanced.gui.MenuType;
+import net.kyori.adventure.text.Component;
+import net.kyori.adventure.text.serializer.plain.PlainTextComponentSerializer;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
@@ -48,12 +50,15 @@ public class GuiListeners implements Listener {
 
     @EventHandler
     public void onClick(@NotNull InventoryClickEvent e) {
+        if (e.getClickedInventory() == null) return;
+
         HumanEntity entity = e.getWhoClicked();
         if (!(entity instanceof Player)) return;
         Player p = (Player) entity;
 
         MenuType menu = guiTracker.getFromMenuTracker(p.getUniqueId());
         if (menu == null) return;
+        e.setCancelled(true);
 
         switch (menu) {
             case CRATE_TYPE:
@@ -67,11 +72,11 @@ public class GuiListeners implements Listener {
             case ADD_ITEM_REWARD:
             case ADD_ITEM_GROUP_REWARD:
             case ADD_COMMAND_REWARD:
-                processGenericRewardMenu(e);
+                processGenericRewardMenu(e, p, menu);
                 return;
 
             case ADD_MONEY_REWARD:
-                processMoneyRewardMenu(e);
+                processMoneyRewardMenu(e, p);
         }
     }
 
@@ -93,7 +98,7 @@ public class GuiListeners implements Listener {
         Inventory inv = e.getInventory();
         switch (menu) {
             case CRATE_TYPE:
-                CrateType type = crates.getCrateType(ChatColor.stripColor(e.getView().title().toString()));
+                CrateType type = crates.getCrateType(ChatColor.stripColor(PlainTextComponentSerializer.plainText().serialize(e.getView().title())));
                 if (type == null) return;
 
                 ItemStack newKey = inv.getItem(24);
@@ -110,11 +115,13 @@ public class GuiListeners implements Listener {
 
                 ItemStack rewardItem = inv.getItem(31);
                 ItemStack weightItem1 = inv.getItem(13);
-                if (rewardItem == null || weightItem1 == null) return;
-                String weightName1 = weightItem1.getI18NDisplayName();
-                if (weightName1 == null) return;
+                if (weightItem1 == null) return;
+                ItemMeta weightMeta1 = weightItem1.getItemMeta();
+                if (weightMeta1 == null) return;
+                String weightName1 = ChatColor.stripColor(PlainTextComponentSerializer.plainText().serialize(weightMeta1.displayName()));
+                int weight1 = Integer.parseInt(weightName1.replace("Weight: ", ""));
+                if (weight1 == 0) break;
 
-                int weight1 = Integer.parseInt(ChatColor.stripColor(weightName1).replace("Weight: ", ""));
                 ItemReward itemReward = new ItemReward(rewardItem, weight1);
                 type1.addReward(weight1, itemReward);
                 break;
@@ -134,9 +141,11 @@ public class GuiListeners implements Listener {
 
                 ItemStack weightItem2 = inv.getItem(13);
                 if (weightItem2 == null) return;
-                String weightName2 = weightItem2.getI18NDisplayName();
-                if (weightName2 == null) return;
-                int weight2 = Integer.parseInt(ChatColor.stripColor(weightName2).replace("Weight: ", ""));
+                ItemMeta weightMeta2 = weightItem2.getItemMeta();
+                if (weightMeta2 == null) return;
+                String weightName2 = ChatColor.stripColor(PlainTextComponentSerializer.plainText().serialize(weightMeta2.displayName()));
+                int weight2 = Integer.parseInt(weightName2.replace("Weight: ", ""));
+                if (weight2 == 0) break;
 
                 ItemGroupReward groupReward = new ItemGroupReward(rewardItems.toArray(new ItemStack[0]), weight2);
                 type2.addReward(weight2, groupReward);
@@ -150,15 +159,17 @@ public class GuiListeners implements Listener {
                 if (type3 == null) return;
 
                 ItemStack book = inv.getItem(31);
-                if (book == null || book.getType() != Material.WRITABLE_BOOK || book.getType() != Material.WRITTEN_BOOK) return;
+                if (book == null || (book.getType() != Material.WRITABLE_BOOK && book.getType() != Material.WRITTEN_BOOK)) return;
                 BookMeta meta = (BookMeta) book.getItemMeta();
-                String command = meta.page(0).toString();
+                String command = PlainTextComponentSerializer.plainText().serialize(meta.page(1));
 
                 ItemStack weightItem3 = inv.getItem(13);
                 if (weightItem3 == null) return;
-                String weightName3 = weightItem3.getI18NDisplayName();
-                if (weightName3 == null) return;
-                int weight3 = Integer.parseInt(ChatColor.stripColor(weightName3).replace("Weight: ", ""));
+                ItemMeta weightMeta3 = weightItem3.getItemMeta();
+                if (weightMeta3 == null) return;
+                String weightName3 = ChatColor.stripColor(PlainTextComponentSerializer.plainText().serialize(weightMeta3.displayName()));
+                int weight3 = Integer.parseInt(weightName3.replace("Weight: ", ""));
+                if (weight3 == 0) break;
 
                 CommandReward cmdReward = new CommandReward(command, weight3);
                 type3.addReward(weight3, cmdReward);
@@ -173,15 +184,18 @@ public class GuiListeners implements Listener {
 
                 ItemStack moneyItem = inv.getItem(31);
                 if (moneyItem == null) return;
-                String moneyName = moneyItem.getI18NDisplayName();
-                if (moneyName == null) return;
-                double money = Double.parseDouble(ChatColor.stripColor(moneyName).replace("Money: ", ""));
+                ItemMeta moneyMeta = moneyItem.getItemMeta();
+                if (moneyMeta == null) return;
+                String moneyName = ChatColor.stripColor(PlainTextComponentSerializer.plainText().serialize(moneyMeta.displayName()));
+                double money = Double.parseDouble(moneyName.replace("Money: ", ""));
 
                 ItemStack weightItem4 = inv.getItem(13);
                 if (weightItem4 == null) return;
-                String weightName4 = weightItem4.getI18NDisplayName();
-                if (weightName4 == null) return;
-                int weight4 = Integer.parseInt(ChatColor.stripColor(weightName4).replace("Weight: ", ""));
+                ItemMeta weightMeta4 = weightItem4.getItemMeta();
+                if (weightMeta4 == null) return;
+                String weightName4 = ChatColor.stripColor(PlainTextComponentSerializer.plainText().serialize(weightMeta4.displayName()));
+                int weight4 = Integer.parseInt(weightName4.replace("Weight: ", ""));
+                if (weight4 == 0) break;
 
                 MoneyReward moneyReward = new MoneyReward(money, weight4);
                 type4.addReward(weight4, moneyReward);
@@ -196,13 +210,12 @@ public class GuiListeners implements Listener {
     }
 
     private void processCrateTypeMenu(@NotNull InventoryClickEvent e, @NotNull Player p) {
-        CrateType type = crates.getCrateType(ChatColor.stripColor(e.getView().title().toString()));
+        CrateType type = crates.getCrateType(ChatColor.stripColor(PlainTextComponentSerializer.plainText().serialize(e.getView().title())));
         if (type == null) return;
 
         CrateTypeMenu crateMenu = type.getMenu();
         for (int clickableSlot : crateMenu.getClickableSlots()) {
-            if (e.getSlot() == clickableSlot) {
-                e.setCancelled(true);
+            if (e.getRawSlot() == clickableSlot) {
 
                 UUID id = p.getUniqueId();
                 switch (clickableSlot) {
@@ -240,6 +253,7 @@ public class GuiListeners implements Listener {
 
                     case 15:
                         ListRewardMenu list = new ListRewardMenu(type);
+                        if (list.getInventories().length == 0) return;
                         p.openInventory(list.getInventories()[0]);
                         guiTracker.removeFromMenuTracker(id);
                         guiTracker.addToMenuTracker(id, MenuType.LIST_REWARD);
@@ -252,16 +266,15 @@ public class GuiListeners implements Listener {
             }
         }
         for (int replaceableSlot : crateMenu.getReplaceableSlots()) {
-            if (e.getSlot() == replaceableSlot) return;
+            if (e.getRawSlot() == replaceableSlot || e.getClickedInventory().equals(p.getInventory())) e.setCancelled(false);
         }
-        e.setCancelled(true);
     }
 
     private void processListMenu(@NotNull InventoryClickEvent e, @NotNull Player p) {
         ListRewardMenu list = guiTracker.getFromListTracker(p.getUniqueId());
         if (list == null) return;
 
-        String title = ChatColor.stripColor(e.getView().title().toString()).replace("Reward List - ", "");
+        String title = ChatColor.stripColor(PlainTextComponentSerializer.plainText().serialize(e.getView().title())).replace("Reward List - ", "");
         int page;
         try {
             page = Integer.parseInt(title.split("/")[0]);
@@ -269,9 +282,8 @@ public class GuiListeners implements Listener {
             return;
         }
 
-        e.setCancelled(true);
         for (int clickableSlot : list.getClickableSlots()) {
-            if (e.getSlot() == clickableSlot) {
+            if (e.getRawSlot() == clickableSlot) {
                 switch (clickableSlot) {
                     case 46:
                         if (page == 1) return;
@@ -279,45 +291,62 @@ public class GuiListeners implements Listener {
                         return;
 
                     case 52:
-                        if (page == list.getInventories().length - 1) return;
+                        if (page == list.getInventories().length) return;
                         p.openInventory(list.getInventories()[page + 1]);
                         return;
 
                     default:
                         CrateType type = list.getType();
-                        Reward<?> reward = type.getWeights().get(page * 45 + e.getSlot());
+                        Reward<?> reward = type.getWeights().get((page - 1) * 45 + e.getRawSlot());
                         type.removeReward(reward);
                         list.populate();
-                        p.openInventory(list.getInventories()[page]);
+                        p.openInventory(list.getInventories()[page - 1]);
                         return;
                 }
             }
         }
     }
 
-    private void processGenericRewardMenu(@NotNull InventoryClickEvent e) {
-        for (int clickableSlot : AddItemRewardMenu.getClickableSlots()) {
-            if (e.getSlot() == clickableSlot) {
-                e.setCancelled(true);
+    private void processGenericRewardMenu(@NotNull InventoryClickEvent e, @NotNull Player p, @NotNull MenuType menu) {
+        int[] clickableSlots;
+        int[] replaceableSlots;
+        switch (menu) {
+            case ADD_COMMAND_REWARD:
+                clickableSlots = AddCommandRewardMenu.getClickableSlots();
+                replaceableSlots = AddCommandRewardMenu.getReplaceableSlots();
+                break;
+            case ADD_ITEM_GROUP_REWARD:
+                clickableSlots = AddItemGroupRewardMenu.getClickableSlots();
+                replaceableSlots = AddItemGroupRewardMenu.getReplaceableSlots();
+                break;
+            case ADD_ITEM_REWARD:
+                clickableSlots = AddItemRewardMenu.getClickableSlots();
+                replaceableSlots = AddItemRewardMenu.getReplaceableSlots();
+                break;
+            default:
+                return;
+        }
+
+        for (int clickableSlot : clickableSlots) {
+            if (e.getRawSlot() == clickableSlot) {
                 Inventory inv = e.getInventory();
 
                 ItemStack weightItem = inv.getItem(13);
                 if (weightItem == null) return;
                 ItemMeta weightMeta = weightItem.getItemMeta();
                 if (weightMeta == null) return;
-                String weightName = weightItem.getI18NDisplayName();
-                if (weightName == null) return;
+                String weightName = ChatColor.stripColor(PlainTextComponentSerializer.plainText().serialize(weightMeta.displayName()));
                 int weight = Integer.parseInt(ChatColor.stripColor(weightName).replace("Weight: ", ""));
 
                 switch (clickableSlot) {
                     case 10:
-                        weight -= 100;
+                        weight -= weight == 0 ? 0 : 100;
                         break;
                     case 11:
-                        weight -= 10;
+                        weight -= weight == 0 ? 0 : 10;
                         break;
                     case 12:
-                        weight -= 1;
+                        weight -= weight == 0 ? 0 : 1;
                         break;
                     case 14:
                         weight += 1;
@@ -330,38 +359,36 @@ public class GuiListeners implements Listener {
                         break;
                 }
 
-                weightMeta.setLocalizedName("§eWeight: §f" + weight);
+                weightMeta.displayName(Component.text("§eWeight: §f" + weight));
+                weightItem.setItemMeta(weightMeta);
             }
         }
-        for (int replaceableSlot : AddItemRewardMenu.getReplaceableSlots()) {
-            if (e.getSlot() == replaceableSlot) return;
+        for (int replaceableSlot : replaceableSlots) {
+            if (e.getRawSlot() == replaceableSlot || e.getClickedInventory().equals(p.getInventory())) e.setCancelled(false);
         }
-        e.setCancelled(true);
     }
 
-    private void processMoneyRewardMenu(@NotNull InventoryClickEvent e) {
-        for (int clickableSlot : AddItemRewardMenu.getClickableSlots()) {
-            if (e.getSlot() == clickableSlot) {
-                e.setCancelled(true);
+    private void processMoneyRewardMenu(@NotNull InventoryClickEvent e, @NotNull Player p) {
+        for (int clickableSlot : AddMoneyRewardMenu.getClickableSlots()) {
+            if (e.getRawSlot() == clickableSlot) {
                 Inventory inv = e.getInventory();
 
                 ItemStack weightItem = inv.getItem(13);
                 if (weightItem == null) return;
                 ItemMeta weightMeta = weightItem.getItemMeta();
                 if (weightMeta == null) return;
-                String weightName = weightItem.getI18NDisplayName();
-                if (weightName == null) return;
-                int weight = Integer.parseInt(ChatColor.stripColor(weightName).replace("Weight: ", ""));
+                String weightName = ChatColor.stripColor(PlainTextComponentSerializer.plainText().serialize(weightMeta.displayName()));
+                int weight = Integer.parseInt(weightName.replace("Weight: ", ""));
 
                 switch (clickableSlot) {
                     case 10:
-                        weight -= 100;
+                        weight -= weight == 0 ? 0 : 100;
                         break;
                     case 11:
-                        weight -= 10;
+                        weight -= weight == 0 ? 0 : 10;
                         break;
                     case 12:
-                        weight -= 1;
+                        weight -= weight == 0 ? 0 : 1;
                         break;
                     case 14:
                         weight += 1;
@@ -373,16 +400,15 @@ public class GuiListeners implements Listener {
                         weight += 100;
                         break;
                 }
+                weightMeta.displayName(Component.text("§eWeight: §f" + weight));
+                weightItem.setItemMeta(weightMeta);
 
-                weightMeta.setLocalizedName("§eWeight: §f" + weight);
-
-                ItemStack moneyItem = inv.getItem(13);
+                ItemStack moneyItem = inv.getItem(31);
                 if (moneyItem == null) return;
                 ItemMeta moneyMeta = moneyItem.getItemMeta();
                 if (moneyMeta == null) return;
-                String moneyName = moneyItem.getI18NDisplayName();
-                if (moneyName == null) return;
-                double money = Double.parseDouble(ChatColor.stripColor(moneyName).replace("Money: ", ""));
+                String moneyName = ChatColor.stripColor(PlainTextComponentSerializer.plainText().serialize(moneyMeta.displayName()));
+                double money = Double.parseDouble(moneyName.replace("Money: ", ""));
 
                 switch (clickableSlot) {
                     case 28:
@@ -405,13 +431,13 @@ public class GuiListeners implements Listener {
                         break;
                 }
 
-                moneyMeta.setLocalizedName("§6Money: §f" + money);
+                moneyMeta.displayName(Component.text("§6Money: §f" + money));
+                moneyItem.setItemMeta(moneyMeta);
             }
         }
-        for (int replaceableSlot : AddItemRewardMenu.getReplaceableSlots()) {
-            if (e.getSlot() == replaceableSlot) return;
+        for (int replaceableSlot : AddMoneyRewardMenu.getReplaceableSlots()) {
+            if (e.getRawSlot() == replaceableSlot || e.getClickedInventory().equals(p.getInventory())) e.setCancelled(false);
         }
-        e.setCancelled(true);
     }
 
     private void cleanup(@NotNull UUID id) {

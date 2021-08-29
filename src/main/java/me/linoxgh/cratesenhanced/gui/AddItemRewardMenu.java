@@ -10,7 +10,6 @@ import org.jetbrains.annotations.NotNull;
 
 public class AddItemRewardMenu {
     private final int[] BORDER_SLOTS = {0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 33, 34, 35, 36, 37, 38, 39, 40, 41, 42, 43, 44};
-
     private static final int[] CLICKABLE = {10, 11, 12, 14, 15, 16};
     private static final int[] REPLACEABLE = {31};
 
@@ -24,7 +23,6 @@ public class AddItemRewardMenu {
     public @NotNull Inventory getInv() {
         return inv;
     }
-
     public static int[] getClickableSlots() {
         return CLICKABLE;
     }
@@ -35,7 +33,7 @@ public class AddItemRewardMenu {
     public void populate() {
         ItemStack border = new ItemStack(Material.GRAY_STAINED_GLASS_PANE);
         ItemMeta borderMeta = border.getItemMeta();
-        borderMeta.setLocalizedName(" ");
+        borderMeta.displayName(Component.text(" "));
         border.setItemMeta(borderMeta);
         for (int slot : BORDER_SLOTS) {
             inv.setItem(slot, border);
@@ -43,49 +41,49 @@ public class AddItemRewardMenu {
 
         ItemStack sub100 = new ItemStack(Material.RED_WOOL);
         ItemMeta sub100Meta = sub100.getItemMeta();
-        sub100Meta.setLocalizedName("§cPress to decrease weight by 100");
+        sub100Meta.displayName(Component.text("§cPress to decrease weight by 100"));
         sub100.setItemMeta(sub100Meta);
         inv.setItem(10, sub100);
 
         ItemStack sub10 = new ItemStack(Material.RED_CARPET);
         ItemMeta sub10Meta = sub10.getItemMeta();
-        sub10Meta.setLocalizedName("§cPress to decrease weight by 10");
+        sub10Meta.displayName(Component.text("§cPress to decrease weight by 10"));
         sub10.setItemMeta(sub10Meta);
         inv.setItem(11, sub10);
 
         ItemStack sub1 = new ItemStack(Material.RED_DYE);
         ItemMeta sub1Meta = sub1.getItemMeta();
-        sub1Meta.setLocalizedName("§cPress to decrease weight by 1");
+        sub1Meta.displayName(Component.text("§cPress to decrease weight by 1"));
         sub1.setItemMeta(sub1Meta);
         inv.setItem(12, sub1);
 
         ItemStack weight = new ItemStack(Material.ANVIL);
         ItemMeta weightMeta = weight.getItemMeta();
-        weightMeta.setLocalizedName("§eWeight: §f0");
+        weightMeta.displayName(Component.text("§eWeight: §f0"));
         weight.setItemMeta(weightMeta);
         inv.setItem(13, weight);
 
         ItemStack add1 = new ItemStack(Material.GREEN_DYE);
         ItemMeta add1Meta = add1.getItemMeta();
-        add1Meta.setLocalizedName("§aPress to increase weight by 1");
+        add1Meta.displayName(Component.text("§aPress to increase weight by 1"));
         add1.setItemMeta(add1Meta);
         inv.setItem(14, add1);
 
         ItemStack add10 = new ItemStack(Material.GREEN_CARPET);
         ItemMeta add10Meta = add10.getItemMeta();
-        add10Meta.setLocalizedName("§aPress to increase weight by 10");
+        add10Meta.displayName(Component.text("§aPress to increase weight by 10"));
         add10.setItemMeta(add10Meta);
         inv.setItem(15, add10);
 
         ItemStack add100 = new ItemStack(Material.GREEN_WOOL);
         ItemMeta add100Meta = add100.getItemMeta();
-        add100Meta.setLocalizedName("§aPress to increase weight by 100");
+        add100Meta.displayName(Component.text("§aPress to increase weight by 100"));
         add100.setItemMeta(add100Meta);
         inv.setItem(16, add100);
 
         ItemStack help = new ItemStack(Material.LIGHT_BLUE_STAINED_GLASS_PANE);
         ItemMeta helpMeta = help.getItemMeta();
-        helpMeta.setLocalizedName("§bPut the item stack in the empty slot");
+        helpMeta.displayName(Component.text("§bPut the item stack in the empty slot"));
         help.setItemMeta(helpMeta);
         inv.setItem(30, help);
         inv.setItem(32, help);
