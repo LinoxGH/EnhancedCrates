@@ -10,12 +10,16 @@ import me.linoxgh.cratesenhanced.data.CrateType;
 import me.linoxgh.cratesenhanced.data.rewards.Reward;
 import me.linoxgh.cratesenhanced.gui.ListRewardMenu;
 import net.milkbowl.vault.economy.Economy;
+
 import org.bukkit.Bukkit;
 import org.bukkit.Effect;
 import org.bukkit.Location;
+import org.bukkit.Material;
 import org.bukkit.Particle;
 import org.bukkit.Sound;
 import org.bukkit.block.Block;
+import org.bukkit.block.BlockState;
+import org.bukkit.block.Lidded;
 import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Item;
 import org.bukkit.entity.Player;
@@ -131,6 +135,11 @@ public class CrateListeners implements Listener {
                 Bukkit.getScheduler().scheduleSyncDelayedTask(plugin, () -> {
                     loc.getWorld().playEffect(loc, Effect.MOBSPAWNER_FLAMES, 1);
                     loc.getWorld().playSound(loc, Sound.BLOCK_WOODEN_BUTTON_CLICK_ON, 3F, 1F);
+                    BlockState b = loc.getBlock().getState();
+                    if (b.getType() == Material.CHEST || b.getType() == Material.TRAPPED_CHEST || b.getType() == Material.ENDER_CHEST) {
+                        Lidded chest = (Lidded) b;
+                        chest.open();
+                    }
 
                     Bukkit.getScheduler().scheduleSyncDelayedTask(plugin, () -> {
                         Location topLoc = loc.set(loc.getX(), loc.getY() + 1D, loc.getZ()).toCenterLocation();
@@ -181,7 +190,14 @@ public class CrateListeners implements Listener {
                                 econ.depositPlayer(p, (double) reward.getReward());
                                 break;
                         }
-                        cooldowns.remove(crate.getPos());
+
+                        Bukkit.getScheduler().scheduleSyncDelayedTask(plugin, () -> {
+                            if (b.getType() == Material.CHEST || b.getType() == Material.TRAPPED_CHEST || b.getType() == Material.ENDER_CHEST) {
+                                Lidded chest = (Lidded) b;
+                                chest.close();
+                            }
+                            cooldowns.remove(crate.getPos());
+                        }, 20L);
                     }, 20L);
                 }, 20L);
             }, 20L);
