@@ -12,6 +12,9 @@ import me.linoxgh.cratesenhanced.CratesEnhanced;
 import me.linoxgh.cratesenhanced.data.Crate;
 import me.linoxgh.cratesenhanced.data.CrateStorage;
 import me.linoxgh.cratesenhanced.data.CrateType;
+import me.linoxgh.cratesenhanced.data.MessageStorage;
+import org.bukkit.configuration.ConfigurationSection;
+import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.util.io.BukkitObjectInputStream;
 import org.bukkit.util.io.BukkitObjectOutputStream;
 import org.jetbrains.annotations.NotNull;
@@ -19,14 +22,20 @@ import org.jetbrains.annotations.NotNull;
 public class IOManager {
     private final CratesEnhanced plugin;
     private final CrateStorage crates;
+    private final MessageStorage messages;
 
+    private final FileConfiguration cfg;
+    private final File configFile;
     private final File cratesFile;
     private final File crateTypesFile;
 
-    public IOManager(@NotNull CratesEnhanced plugin, @NotNull CrateStorage crates) {
+    public IOManager(@NotNull CratesEnhanced plugin, @NotNull CrateStorage crates, @NotNull MessageStorage messages) {
         this.plugin = plugin;
         this.crates = crates;
+        this.messages = messages;
 
+        this.cfg = plugin.getConfig();
+        configFile = new File(plugin.getDataFolder().getPath() + File.separator + ".config.yml");
         cratesFile = new File(plugin.getDataFolder().getPath() + File.separator + "crates.dat");
         crateTypesFile = new File(plugin.getDataFolder().getPath() + File.separator + "crate-types.dat");
     }
@@ -47,6 +56,34 @@ public class IOManager {
         } catch (IOException e) {
             plugin.getLogger().warning("§4Failed to create the crate-types.dat file.");
             e.printStackTrace();
+        }
+    }
+
+    public void loadMessages() {
+        ConfigurationSection messages = cfg.getConfigurationSection("messages");
+        if (messages == null) messages = cfg.createSection("messages");
+
+        StringBuilder path = new StringBuilder();
+        for (String masterKey : messages.getKeys(false)) {
+            path.append(masterKey).append(".");
+
+            ConfigurationSection masterMessages = messages.getConfigurationSection(masterKey);
+            if (masterMessages == null) masterMessages = messages.createSection(masterKey);
+
+            for (String subKey : masterMessages.getKeys(false)) {
+                path.append(subKey).append(".");
+
+                ConfigurationSection subMessages = masterMessages.getConfigurationSection(subKey);
+                if (subMessages == null) subMessages = masterMessages.createSection(subKey);
+
+                for (String key : subMessages.getKeys(false)) {
+                    path.append(key);
+
+                    String message = subMessages.getString(key);
+                    this.messages.addMessage(path.toString(), message == null ? "ERROR" : message);
+                    path = new StringBuilder();
+                }
+            }
         }
     }
 

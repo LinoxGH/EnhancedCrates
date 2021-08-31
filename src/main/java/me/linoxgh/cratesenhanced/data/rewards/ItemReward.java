@@ -1,5 +1,6 @@
 package me.linoxgh.cratesenhanced.data.rewards;
 
+import java.util.HashMap;
 import java.util.Map;
 
 import org.bukkit.Location;
@@ -47,9 +48,20 @@ public class ItemReward implements Reward<ItemStack> {
                     item.setCanPlayerPickup(true);
                     item.setWillAge(true);
                     item.setPickupDelay(20);
-                    item.setItemStack(reward);
+                    item.setItemStack(reward.clone());
                 }
         );
+        return true;
+    }
+
+    @Override
+    public boolean giveReward(@NotNull Player p) {
+        HashMap<Integer, ItemStack> unfits = p.getInventory().addItem(reward.clone());
+        if (!(unfits.isEmpty())) {
+            for (Map.Entry<Integer, ItemStack> entry : unfits.entrySet()) {
+                p.getLocation().getWorld().dropItem(p.getLocation(), entry.getValue());
+            }
+        }
         return true;
     }
 

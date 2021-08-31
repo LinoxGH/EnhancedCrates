@@ -28,9 +28,18 @@ public interface Reward<T> extends ConfigurationSerializable {
      * Gives this reward to a player.
      *
      * @param p The player to give
+     * @param crateLocation The location of the opened crate
      * @return Success
      */
     boolean giveReward(@NotNull Player p, @NotNull Location crateLocation);
+
+    /**
+     * Gives this reward to a player.
+     *
+     * @param p The player to give
+     * @return Success
+     */
+    boolean giveReward(@NotNull Player p);
 
     /**
      * Gets the reward.

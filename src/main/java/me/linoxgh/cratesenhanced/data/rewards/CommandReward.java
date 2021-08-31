@@ -32,6 +32,10 @@ public class CommandReward implements Reward<String> {
 
     @Override
     public boolean giveReward(@NotNull Player p, @NotNull Location crateLocation) {
+        return giveReward(p);
+    }
+    @Override
+    public boolean giveReward(@NotNull Player p) {
         Bukkit.dispatchCommand(Bukkit.getConsoleSender(), reward);
         return true;
     }

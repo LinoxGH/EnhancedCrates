@@ -1,6 +1,7 @@
 package me.linoxgh.cratesenhanced.commands;
 
 import me.linoxgh.cratesenhanced.data.CrateStorage;
+import me.linoxgh.cratesenhanced.data.MessageStorage;
 import me.linoxgh.cratesenhanced.gui.GUITracker;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
@@ -8,6 +9,7 @@ import org.bukkit.command.CommandSender;
 import org.jetbrains.annotations.NotNull;
 
 public class MainCommand implements CommandExecutor {
+    private final MessageStorage messages;
 
     private final HelpCommand help;
     private final ListCommand list;
@@ -17,14 +19,16 @@ public class MainCommand implements CommandExecutor {
     private final GiveCommand give;
     private final TypeCommand type;
 
-    public MainCommand(@NotNull CrateStorage crates, @NotNull GUITracker guiTracker) {
-        this.help = new HelpCommand();
-        this.list = new ListCommand(crates, guiTracker);
-        this.create = new CreateCommand(crates);
-        this.delete = new DeleteCommand(crates);
-        this.edit = new EditCommand(crates, guiTracker);
-        this.give = new GiveCommand(crates);
-        this.type = new TypeCommand(crates);
+    public MainCommand(@NotNull CrateStorage crates, @NotNull GUITracker guiTracker, @NotNull MessageStorage messages) {
+        this.help = new HelpCommand(messages);
+        this.list = new ListCommand(crates, guiTracker, messages);
+        this.create = new CreateCommand(crates, messages);
+        this.delete = new DeleteCommand(crates, messages);
+        this.edit = new EditCommand(crates, guiTracker, messages);
+        this.give = new GiveCommand(crates, messages);
+        this.type = new TypeCommand(crates, messages);
+
+        this.messages = messages;
     }
 
     @Override
@@ -32,31 +36,44 @@ public class MainCommand implements CommandExecutor {
         if (args.length == 0) {
             return help.execute(sender, args);
         }
-
+        me.linoxgh.cratesenhanced.commands.Command cmd;
         switch (args[0]) {
             case "help":
-                return help.execute(sender, args);
+                cmd = help;
+                break;
 
             case "list":
-                return list.execute(sender, args);
+                cmd = list;
+                break;
 
             case "create":
-                return create.execute(sender, args);
+                cmd = create;
+                break;
 
             case "type":
-                return type.execute(sender, args);
+                cmd = type;
+                break;
 
             case "delete":
-                return delete.execute(sender, args);
+                cmd = delete;
+                break;
 
             case "edit":
-                return edit.execute(sender, args);
+                cmd = edit;
+                break;
 
             case "give":
-                return give.execute(sender, args);
+                cmd = give;
+                break;
 
             default:
                 return false;
         }
+        String perm = cmd.getPermission();
+        if (perm != null && !(sender.hasPermission(perm))) {
+            sender.sendMessage(messages.getMessage("commands.general.no-permission"));
+            return true;
+        }
+        return cmd.execute(sender, args);
     }
 }

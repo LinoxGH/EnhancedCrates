@@ -9,8 +9,6 @@ import me.linoxgh.cratesenhanced.data.CrateStorage;
 import me.linoxgh.cratesenhanced.data.CrateType;
 import me.linoxgh.cratesenhanced.data.rewards.Reward;
 import me.linoxgh.cratesenhanced.gui.ListRewardMenu;
-import net.milkbowl.vault.economy.Economy;
-
 import org.bukkit.Bukkit;
 import org.bukkit.Effect;
 import org.bukkit.Location;
@@ -20,8 +18,6 @@ import org.bukkit.Sound;
 import org.bukkit.block.Block;
 import org.bukkit.block.BlockState;
 import org.bukkit.block.Lidded;
-import org.bukkit.entity.EntityType;
-import org.bukkit.entity.Item;
 import org.bukkit.entity.Player;
 import org.bukkit.event.Event;
 import org.bukkit.event.EventHandler;
@@ -29,7 +25,6 @@ import org.bukkit.event.Listener;
 import org.bukkit.event.block.Action;
 import org.bukkit.event.block.BlockBreakEvent;
 import org.bukkit.event.block.BlockPlaceEvent;
-import org.bukkit.event.entity.CreatureSpawnEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.inventory.EquipmentSlot;
 import org.bukkit.inventory.ItemStack;
@@ -136,63 +131,22 @@ public class CrateListeners implements Listener {
                     loc.getWorld().playEffect(loc, Effect.MOBSPAWNER_FLAMES, 1);
                     loc.getWorld().playSound(loc, Sound.BLOCK_WOODEN_BUTTON_CLICK_ON, 3F, 1F);
                     BlockState b = loc.getBlock().getState();
-                    if (b.getType() == Material.CHEST || b.getType() == Material.TRAPPED_CHEST || b.getType() == Material.ENDER_CHEST) {
+
+                    boolean isChest = b.getType() == Material.CHEST || b.getType() == Material.TRAPPED_CHEST || b.getType() == Material.ENDER_CHEST;
+                    if (isChest) {
                         Lidded chest = (Lidded) b;
                         chest.open();
                     }
 
                     Bukkit.getScheduler().scheduleSyncDelayedTask(plugin, () -> {
                         Location topLoc = loc.set(loc.getX(), loc.getY() + 1D, loc.getZ()).toCenterLocation();
+
                         loc.getWorld().spawnParticle(Particle.EXPLOSION_LARGE, topLoc, 1);
                         loc.getWorld().playSound(loc, Sound.ENTITY_ARROW_HIT_PLAYER, 1F, 1F);
-
-                        switch (reward.getRewardType()) {
-                            case ITEM:
-                                loc.getWorld().spawnEntity(
-                                        topLoc,
-                                        EntityType.DROPPED_ITEM,
-                                        CreatureSpawnEvent.SpawnReason.CUSTOM,
-                                        (entity) -> {
-                                            Item item = (Item) entity;
-                                            item.setOwner(p.getUniqueId());
-                                            item.setCanMobPickup(false);
-                                            item.setCanPlayerPickup(true);
-                                            item.setWillAge(true);
-                                            item.setPickupDelay(20);
-                                            item.setItemStack((ItemStack) reward.getReward());
-                                        }
-                                );
-                                break;
-                            case ITEM_GROUP:
-                                for (ItemStack drop : ((ItemStack[]) reward.getReward())) {
-                                    loc.getWorld().spawnEntity(
-                                            topLoc,
-                                            EntityType.DROPPED_ITEM,
-                                            CreatureSpawnEvent.SpawnReason.CUSTOM,
-                                            (entity) -> {
-                                                Item item = (Item) entity;
-                                                item.setOwner(p.getUniqueId());
-                                                item.setCanMobPickup(false);
-                                                item.setCanPlayerPickup(true);
-                                                item.setWillAge(true);
-                                                item.setPickupDelay(20);
-                                                item.setItemStack(drop);
-                                            }
-                                    );
-                                }
-                                break;
-                            case COMMAND:
-                                Bukkit.dispatchCommand(Bukkit.getConsoleSender(), (String) reward.getReward());
-                                break;
-                            case MONEY:
-                                Economy econ = CratesEnhanced.getEcon();
-                                if (econ == null) break;
-                                econ.depositPlayer(p, (double) reward.getReward());
-                                break;
-                        }
+                        reward.giveReward(p, loc);
 
                         Bukkit.getScheduler().scheduleSyncDelayedTask(plugin, () -> {
-                            if (b.getType() == Material.CHEST || b.getType() == Material.TRAPPED_CHEST || b.getType() == Material.ENDER_CHEST) {
+                            if (isChest) {
                                 Lidded chest = (Lidded) b;
                                 chest.close();
                             }

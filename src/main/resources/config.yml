@@ -1,1 +1,58 @@
 metrics-enabled: true
+
+#
+#  When translating, do not change the keywords.
+#  Only change the texts inside quotes.
+#
+messages:
+  commands:
+    general:
+      no-permission: "&4You do not have enough permission to use this command."
+
+    help:
+      cmd-help1: "&e- &aShows the help pages."
+      cmd-create1: "&e- &aCreates a new crate."
+      cmd-create2: "&e- &aYou can edit the rewards with &6/crates edit&a."
+      cmd-type1: "&e- &aAdds|Removes a crate type."
+      cmd-delete1: "&e- &aDeletes the crate."
+      cmd-delete2: "&e- &cThis will also delete the block in that position!"
+      cmd-edit1: "&e- &aOpens a gui to edit the crate type."
+      cmd-give1: "&e- &aGives a crate key or a random reward."
+      cmd-give2: "&e- &aWhen silent, no success message will be printed."
+
+    create:
+      invalid-world: "&4Please enter a valid world name."
+      invalid-coordinate: "&4Please enter a valid coordinate."
+      preexisting-cratename: "&4A crate with this name already exists."
+      preexisting-coordinate: "&4A crate in this coordinates already exists."
+      success: "&aSuccessfully created a crate."
+
+    delete:
+      invalid-cratename: "&4Could not find the crate."
+      success: "&aSuccessfully removed crate."
+
+    edit:
+      invalid-sender: "&4This command can only be used in game."
+      invalid-cratetype: "&4Could not find the specified crate type."
+
+    give:
+      invalid-player: "&4The specified player is offline."
+      invalid-cratetype: "&4Could not find the specified crate type."
+      no-reward: "&4The specified crate type does not have any rewards to give."
+      fail: "&4Could not give a random reward to the player."
+      success: "&aSuccessfully gave the key to this crate type."
+
+    type:
+      invalid-sender: "&4This command can only be used in game."
+      invalid-key: "&4You must hold the key item in your hand."
+      invalid-cratetype: "&4Could not find the specified crate type."
+      preexisting-cratetype: "&4A crate type with this name already exists."
+      success-add: "&aSuccessfully added a new crate type."
+      success-remove: "&aSuccessfully removed this crate type."
+
+    list:
+      invalid-sender: "&4This command can only be used in game."
+      invalid-cratetype: "&4Could not find the specified crate type."
+      header: "&e.*.-----_-----{ &3Crates &e}-----_-----.*."
+      columns: "&9Crate Name &e- &9Location &e- &9Crate Type"
+      cratetypes: "&9Crate Types"

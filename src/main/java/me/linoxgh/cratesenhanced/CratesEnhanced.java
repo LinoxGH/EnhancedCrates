@@ -5,6 +5,7 @@ import me.linoxgh.cratesenhanced.data.BlockPosition;
 import me.linoxgh.cratesenhanced.data.Crate;
 import me.linoxgh.cratesenhanced.data.CrateStorage;
 import me.linoxgh.cratesenhanced.data.CrateType;
+import me.linoxgh.cratesenhanced.data.MessageStorage;
 import me.linoxgh.cratesenhanced.data.rewards.CommandReward;
 import me.linoxgh.cratesenhanced.data.rewards.ItemGroupReward;
 import me.linoxgh.cratesenhanced.data.rewards.ItemReward;
@@ -21,6 +22,7 @@ import org.jetbrains.annotations.Nullable;
 
 public class CratesEnhanced extends JavaPlugin {
     private final CrateStorage crateStorage = new CrateStorage();
+    private final MessageStorage messageStorage = new MessageStorage();
     private final GUITracker guiTracker = new GUITracker();
     private IOManager ioManager;
 
@@ -31,15 +33,6 @@ public class CratesEnhanced extends JavaPlugin {
     public void onEnable() {
         saveDefaultConfig();
 
-        if (!setupEconomy()) {
-            isVaultEnabled = false;
-            getLogger().warning("Could not find Vault, continuing without it.");
-            getLogger().warning("Because of this, money rewards will be inaccessible.");
-        } else {
-            isVaultEnabled = true;
-            getLogger().info("Vault found. Enabling Vault support.");
-        }
-
         ConfigurationSerialization.registerClass(Crate.class);
         ConfigurationSerialization.registerClass(CrateType.class);
         ConfigurationSerialization.registerClass(BlockPosition.class);
@@ -49,7 +42,8 @@ public class CratesEnhanced extends JavaPlugin {
         ConfigurationSerialization.registerClass(CommandReward.class);
         ConfigurationSerialization.registerClass(MoneyReward.class);
 
-        ioManager = new IOManager(this, crateStorage);
+        ioManager = new IOManager(this, crateStorage, messageStorage);
+        ioManager.loadMessages();
         ioManager.checkFiles();
         if (ioManager.loadCrateTypes()) {
             getLogger().info("Successfully loaded crate types.");
@@ -62,7 +56,16 @@ public class CratesEnhanced extends JavaPlugin {
             getLogger().warning("Could not load crates.");
         }
 
-        getCommand("crates").setExecutor(new MainCommand(crateStorage, guiTracker));
+        if (!setupEconomy()) {
+            isVaultEnabled = false;
+            getLogger().warning("Could not find Vault, continuing without it.");
+            getLogger().warning("Because of this, money rewards will be inaccessible.");
+        } else {
+            isVaultEnabled = true;
+            getLogger().info("Vault found. Enabling Vault support.");
+        }
+
+        getCommand("crates").setExecutor(new MainCommand(crateStorage, guiTracker, messageStorage));
 
         new CrateListeners(this, crateStorage);
         new GuiListeners(this, crateStorage, guiTracker);

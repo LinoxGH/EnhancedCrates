@@ -32,6 +32,11 @@ public class MoneyReward implements Reward<Double> {
 
     @Override
     public boolean giveReward(@NotNull Player p, @NotNull Location crateLocation) {
+        return giveReward(p);
+    }
+
+    @Override
+    public boolean giveReward(@NotNull Player p) {
         if (!CratesEnhanced.isVaultEnabled() || CratesEnhanced.getEcon() == null) return false;
         CratesEnhanced.getEcon().depositPlayer(p, reward);
         return true;

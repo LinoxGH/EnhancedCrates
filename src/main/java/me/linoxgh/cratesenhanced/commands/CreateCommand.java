@@ -3,34 +3,34 @@ package me.linoxgh.cratesenhanced.commands;
 import me.linoxgh.cratesenhanced.data.BlockPosition;
 import me.linoxgh.cratesenhanced.data.Crate;
 import me.linoxgh.cratesenhanced.data.CrateStorage;
+import me.linoxgh.cratesenhanced.data.MessageStorage;
 import org.bukkit.Bukkit;
 import org.bukkit.command.CommandSender;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 public class CreateCommand extends Command {
     private final CrateStorage crates;
+    private final MessageStorage messages;
 
-    CreateCommand(@NotNull CrateStorage crates) {
+    CreateCommand(@NotNull CrateStorage crates, @NotNull MessageStorage messages) {
         this.crates = crates;
+        this.messages = messages;
     }
 
     @Override
     public boolean execute(@NotNull CommandSender sender, @NotNull String[] args) {
-        if (!(sender.hasPermission("crates.create"))) {
-            sender.sendMessage("§4You do not have enough permission to use this command.");
-            return true;
-        }
         if (args.length != 7) return false;
 
         try {
             if (Bukkit.getWorld(args[5]) == null) {
-                sender.sendMessage("§4Please enter a valid world name.");
+                sender.sendMessage(messages.getMessage("commands.create.invalid-world"));
                 return true;
             }
 
             Crate testName = crates.getCrate(args[1]);
             if (testName != null) {
-                sender.sendMessage("§4A crate with this name already exists.");
+                sender.sendMessage(messages.getMessage("commands.create.preexisting.cratename"));
                 return true;
             }
 
@@ -43,18 +43,23 @@ public class CreateCommand extends Command {
 
             Crate testPos = crates.getCrate(pos);
             if (testPos != null) {
-                sender.sendMessage("§4A crate in this coordinates already exists.");
+                sender.sendMessage(messages.getMessage("commands.create.preexisting-coordinate"));
                 return true;
             }
 
             Crate crate = new Crate(args[1], pos, args[6]);
             crates.addCrate(args[1], crate);
 
-            sender.sendMessage("§aSuccessfully created a crate.");
+            sender.sendMessage(messages.getMessage("commands.create.success"));
             return true;
         } catch (NumberFormatException ignored) {
-            sender.sendMessage("§4Please enter a valid coordinate.");
+            sender.sendMessage(messages.getMessage("commands.create.invalid-coordinate"));
             return true;
         }
+    }
+
+    @Override
+    public @Nullable String getPermission() {
+        return "crates.create";
     }
 }
