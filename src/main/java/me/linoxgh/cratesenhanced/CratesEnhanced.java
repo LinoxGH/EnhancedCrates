@@ -46,28 +46,28 @@ public class CratesEnhanced extends JavaPlugin {
         ioManager.loadMessages();
         ioManager.checkFiles();
         if (ioManager.loadCrateTypes()) {
-            getLogger().info("Successfully loaded crate types.");
+            getLogger().info(messageStorage.getMessage("general.loading.success-cratetype"));
         } else {
-            getLogger().warning("Could not load crate types.");
+            getLogger().warning(messageStorage.getMessage("general.loading.fail-cratetype"));
         }
         if (ioManager.loadCrates()) {
-            getLogger().info("Successfully loaded crates.");
+            getLogger().info(messageStorage.getMessage("general.loading.success-crate"));
         } else {
-            getLogger().warning("Could not load crates.");
+            getLogger().warning(messageStorage.getMessage("general.loading.fail-crate"));
         }
 
         if (!setupEconomy()) {
             isVaultEnabled = false;
-            getLogger().warning("Could not find Vault, continuing without it.");
-            getLogger().warning("Because of this, money rewards will be inaccessible.");
+            getLogger().warning(messageStorage.getMessage("general.loading.fail-vault1"));
+            getLogger().warning(messageStorage.getMessage("general.loading.fail-vault2"));
         } else {
             isVaultEnabled = true;
-            getLogger().info("Vault found. Enabling Vault support.");
+            getLogger().info(messageStorage.getMessage("general.loading.success-vault"));
         }
 
         getCommand("crates").setExecutor(new MainCommand(crateStorage, guiTracker, messageStorage));
 
-        new CrateListeners(this, crateStorage);
+        new CrateListeners(this, crateStorage, messageStorage);
         new GuiListeners(this, crateStorage, guiTracker);
 
         if (getConfig().getBoolean("metrics-enabled")) enableMetrics();
@@ -77,22 +77,22 @@ public class CratesEnhanced extends JavaPlugin {
     public void onDisable() {
         if (!crateStorage.getCrateTypes().isEmpty()) {
             if (ioManager.saveCrateTypes()) {
-                getLogger().info("Successfully saved crate types.");
+                getLogger().info(messageStorage.getMessage("general.saving.success-cratetype"));
             } else {
-                getLogger().warning("Could not save crate types.");
+                getLogger().warning(messageStorage.getMessage("general.saving.fail-cratetype"));
             }
         } else {
-            getLogger().info("There was no crate types to save.");
+            getLogger().info(messageStorage.getMessage("general.saving.none-cratetype"));
         }
 
         if (!crateStorage.getCrates().isEmpty()) {
             if (ioManager.saveCrates()) {
-                getLogger().info("Successfully saved crates.");
+                getLogger().info(messageStorage.getMessage("general.saving.success-crate"));
             } else {
-                getLogger().warning("Could not save crates.");
+                getLogger().warning(messageStorage.getMessage("general.saving.fail-crate"));
             }
         } else {
-            getLogger().info("There was no crates to save.");
+            getLogger().info(messageStorage.getMessage("general.saving.none-crate"));
         }
     }
 
@@ -117,5 +117,6 @@ public class CratesEnhanced extends JavaPlugin {
 
     private void enableMetrics() {
         new Metrics(this, 12500);
+        getLogger().info(messageStorage.getMessage("general.loading.metrics"));
     }
 }

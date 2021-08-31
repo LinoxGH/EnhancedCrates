@@ -5,6 +5,33 @@ metrics-enabled: true
 #  Only change the texts inside quotes.
 #
 messages:
+  general:
+    loading:
+      fail-createcratetype: "Failed to create the crate-types.dat file."
+      fail-createcrate: "Failed to create the crates.dat file."
+      fail-cratetype: "Could not load crate types."
+      fail-crate: "Could not load crates."
+      fail-vault1: "Could not find Vault, continuing without it."
+      fail-vault2: "Because of this, money rewards will be inaccessible."
+      success-cratetype: "Successfully loaded crate types."
+      success-crate: "Successfully loaded crates."
+      success-vault: "Vault found. Enabling Vault support."
+      metrics: "bStats metrics enabled. You can disable this in config file."
+
+    saving:
+      fail-cratetype: "Could not save crate types."
+      fail-crate: "Could not save crates."
+      none-cratetype: "There was no crate types to save."
+      none-crate: "There was no crates to save."
+      success-cratetype: "Successfully saved crate types."
+      success-crate: "Successfully saved crates."
+
+
+  gameplay:
+    crate-interaction:
+      break: "§aSuccessfully removed the crate."
+
+
   commands:
     general:
       no-permission: "&4You do not have enough permission to use this command."

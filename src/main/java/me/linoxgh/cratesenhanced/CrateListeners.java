@@ -7,6 +7,7 @@ import me.linoxgh.cratesenhanced.data.BlockPosition;
 import me.linoxgh.cratesenhanced.data.Crate;
 import me.linoxgh.cratesenhanced.data.CrateStorage;
 import me.linoxgh.cratesenhanced.data.CrateType;
+import me.linoxgh.cratesenhanced.data.MessageStorage;
 import me.linoxgh.cratesenhanced.data.rewards.Reward;
 import me.linoxgh.cratesenhanced.gui.ListRewardMenu;
 import org.bukkit.Bukkit;
@@ -33,11 +34,13 @@ import org.jetbrains.annotations.NotNull;
 public class CrateListeners implements Listener {
     private final CratesEnhanced plugin;
     private final CrateStorage crates;
+    private final MessageStorage messages;
     private final Set<BlockPosition> cooldowns;
 
-    CrateListeners(@NotNull CratesEnhanced plugin, @NotNull CrateStorage crates) {
+    CrateListeners(@NotNull CratesEnhanced plugin, @NotNull CrateStorage crates, @NotNull MessageStorage messages) {
         this.plugin = plugin;
         this.crates = crates;
+        this.messages = messages;
         cooldowns = new HashSet<>();
         Bukkit.getPluginManager().registerEvents(this, plugin);
     }
@@ -95,10 +98,13 @@ public class CrateListeners implements Listener {
         Crate crate = crates.getCrate(new BlockPosition(b.getX(), b.getY(), b.getZ(), b.getWorld().getName()));
         if (crate == null) return;
 
-        if (!p.hasPermission("crates.delete")) return;
+        if (!p.hasPermission("crates.delete")) {
+            e.setCancelled(true);
+            return;
+        }
 
         crates.removeCrate(crate.getName());
-        p.sendMessage("§aSuccessfully removed the crate.");
+        p.sendMessage(messages.getMessage("gameplay.crate-interaction.break"));
     }
 
     @EventHandler

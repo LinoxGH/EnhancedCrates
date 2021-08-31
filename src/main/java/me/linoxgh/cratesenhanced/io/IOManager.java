@@ -25,7 +25,6 @@ public class IOManager {
     private final MessageStorage messages;
 
     private final FileConfiguration cfg;
-    private final File configFile;
     private final File cratesFile;
     private final File crateTypesFile;
 
@@ -35,7 +34,6 @@ public class IOManager {
         this.messages = messages;
 
         this.cfg = plugin.getConfig();
-        configFile = new File(plugin.getDataFolder().getPath() + File.separator + ".config.yml");
         cratesFile = new File(plugin.getDataFolder().getPath() + File.separator + "crates.dat");
         crateTypesFile = new File(plugin.getDataFolder().getPath() + File.separator + "crate-types.dat");
     }
@@ -43,18 +41,18 @@ public class IOManager {
     @SuppressWarnings("ResultOfMethodCallIgnored")
     public void checkFiles() {
         try {
-            cratesFile.getParentFile().mkdirs();
-            cratesFile.createNewFile();
+            crateTypesFile.getParentFile().mkdirs();
+            crateTypesFile.createNewFile();
         } catch (IOException e) {
-            plugin.getLogger().warning("Failed to create the crates.dat file.");
+            plugin.getLogger().warning(messages.getMessage("general.loading.fail-createcratetype"));
             e.printStackTrace();
         }
 
         try {
-            crateTypesFile.getParentFile().mkdirs();
-            crateTypesFile.createNewFile();
+            cratesFile.getParentFile().mkdirs();
+            cratesFile.createNewFile();
         } catch (IOException e) {
-            plugin.getLogger().warning("§4Failed to create the crate-types.dat file.");
+            plugin.getLogger().warning(messages.getMessage("general.loading.fail-createcrate"));
             e.printStackTrace();
         }
     }
@@ -63,25 +61,17 @@ public class IOManager {
         ConfigurationSection messages = cfg.getConfigurationSection("messages");
         if (messages == null) messages = cfg.createSection("messages");
 
-        StringBuilder path = new StringBuilder();
         for (String masterKey : messages.getKeys(false)) {
-            path.append(masterKey).append(".");
-
             ConfigurationSection masterMessages = messages.getConfigurationSection(masterKey);
-            if (masterMessages == null) masterMessages = messages.createSection(masterKey);
+            if (masterMessages == null) continue;
 
             for (String subKey : masterMessages.getKeys(false)) {
-                path.append(subKey).append(".");
-
                 ConfigurationSection subMessages = masterMessages.getConfigurationSection(subKey);
-                if (subMessages == null) subMessages = masterMessages.createSection(subKey);
+                if (subMessages == null) continue;
 
                 for (String key : subMessages.getKeys(false)) {
-                    path.append(key);
-
                     String message = subMessages.getString(key);
-                    this.messages.addMessage(path.toString(), message == null ? "ERROR" : message);
-                    path = new StringBuilder();
+                    this.messages.addMessage(masterKey + "." + subKey + "." + key, message == null ? "ERROR" : message);
                 }
             }
         }
