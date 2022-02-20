@@ -3,12 +3,14 @@ package me.linoxgh.cratesenhanced.data.rewards;
 import java.util.HashMap;
 import java.util.Map;
 
+import me.linoxgh.cratesenhanced.CratesEnhanced;
 import org.bukkit.Location;
 import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Item;
 import org.bukkit.entity.Player;
 import org.bukkit.event.entity.CreatureSpawnEvent;
 import org.bukkit.inventory.ItemStack;
+import org.bukkit.util.Vector;
 import org.jetbrains.annotations.NotNull;
 
 public class ItemGroupReward implements Reward<ItemStack[]> {
@@ -36,23 +38,32 @@ public class ItemGroupReward implements Reward<ItemStack[]> {
 
     @Override
     public boolean giveReward(@NotNull Player p, @NotNull Location crateLocation) {
-        Location topLoc = crateLocation.set(crateLocation.getX(), crateLocation.getY() + 1D, crateLocation.getZ()).toCenterLocation();
-        for (ItemStack reward : reward) {
-            crateLocation.getWorld().spawnEntity(
-                    topLoc,
-                    EntityType.DROPPED_ITEM,
-                    CreatureSpawnEvent.SpawnReason.CUSTOM,
-                    (entity) -> {
-                        Item item = (Item) entity;
-                        item.setOwner(p.getUniqueId());
-                        item.setCanMobPickup(false);
-                        item.setCanPlayerPickup(true);
-                        item.setWillAge(true);
-                        item.setPickupDelay(20);
-                        item.setItemStack(reward.clone());
-                    }
-            );
+        Location topLoc = crateLocation.clone().toCenterLocation().add(0,0.5,0);
+        Vector direction = p.getLocation().subtract(crateLocation).toVector().setY(0).normalize().multiply(0.1);
+
+        for (ItemStack reward : this.reward) {
+
+            ItemStack single = reward.clone().asOne();
+            for (int i = 0;i < reward.getAmount();i++) {
+                crateLocation.getWorld().spawnEntity(
+                        topLoc,
+                        EntityType.DROPPED_ITEM,
+                        CreatureSpawnEvent.SpawnReason.CUSTOM,
+                        (entity) -> {
+                            Item item = (Item) entity;
+                            item.setOwner(p.getUniqueId());
+                            item.setCanMobPickup(false);
+                            item.setCanPlayerPickup(true);
+                            item.setWillAge(true);
+                            item.setPickupDelay(20);
+                            item.setItemStack(single.clone());
+                            CratesEnhanced.getCrateListeners().markUnmergeable(item);
+                            item.setVelocity(item.getVelocity().add(direction));
+                        }
+                );
+            }
         }
+
         return true;
     }
 
