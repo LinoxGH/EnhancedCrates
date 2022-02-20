@@ -7,11 +7,14 @@ import org.bukkit.command.CommandSender;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
+import java.util.Map;
+
 public class DeleteCommand extends Command {
     private final CrateStorage crates;
     private final MessageStorage messages;
 
-    DeleteCommand(@NotNull CrateStorage crates, @NotNull MessageStorage messages) {
+    DeleteCommand(@NotNull String name, @NotNull Map<String, Command> commandMap, @NotNull CrateStorage crates, @NotNull MessageStorage messages) {
+        super(name, commandMap);
         this.crates = crates;
         this.messages = messages;
     }

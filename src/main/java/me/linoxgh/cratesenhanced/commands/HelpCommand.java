@@ -1,9 +1,6 @@
 package me.linoxgh.cratesenhanced.commands;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.UUID;
+import java.util.*;
 
 import me.linoxgh.cratesenhanced.data.MessageStorage;
 import org.bukkit.command.CommandSender;
@@ -17,7 +14,8 @@ public class HelpCommand extends Command {
     private final HashMap<UUID, List<String[]>> cachedHelp = new HashMap<>();
     private final HashMap<UUID, Long> cacheTimestamp = new HashMap<>();
 
-    HelpCommand(@NotNull MessageStorage messageStorage) {
+    HelpCommand(@NotNull String name, @NotNull Map<String, Command> commandMap, @NotNull MessageStorage messageStorage) {
+        super(name, commandMap);
         this.messageStorage = messageStorage;
     }
 
@@ -37,7 +35,7 @@ public class HelpCommand extends Command {
             }
         }
 
-        List<String> messages = new ArrayList<>();
+        List<String> messages = new ArrayList<>(18);
         if (sender.hasPermission("crates.main")) {
             messages.add("§6/crates help §9[page]");
             messages.add(messageStorage.getMessage("commands.help.cmd-help1"));
@@ -98,7 +96,7 @@ public class HelpCommand extends Command {
         for (int i = 0; i < pages.size(); i++) {
             List<String> page = pages.get(i);
             page.add(0, "§e.*.-----_-----{ §3Crates Enhanced §e}-----_-----.*.");
-            page.add("§e.*.-----_-----{ §3Help -" + (i + 1) + " §e}-----_-----.*.");
+            page.add("§e.*.-----_-----{ §3Help - " + (i + 1) + " §e}-----_-----.*.");
             result.add(page.toArray(new String[0]));
         }
         return result;

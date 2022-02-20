@@ -9,11 +9,14 @@ import org.bukkit.inventory.ItemStack;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
+import java.util.Map;
+
 public class TypeCommand extends Command {
     private final CrateStorage crates;
     private final MessageStorage messages;
 
-    TypeCommand(@NotNull CrateStorage crates, @NotNull MessageStorage messages) {
+    TypeCommand(@NotNull String name, @NotNull Map<String, Command> commandMap, @NotNull CrateStorage crates, @NotNull MessageStorage messages) {
+        super(name, commandMap);
         this.crates = crates;
         this.messages = messages;
     }
