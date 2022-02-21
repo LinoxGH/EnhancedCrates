@@ -2,7 +2,9 @@ package me.linoxgh.cratesenhanced;
 
 import java.util.HashSet;
 import java.util.Set;
+import java.util.UUID;
 
+import com.destroystokyo.paper.event.entity.EntityRemoveFromWorldEvent;
 import me.linoxgh.cratesenhanced.data.BlockPosition;
 import me.linoxgh.cratesenhanced.data.Crate;
 import me.linoxgh.cratesenhanced.data.CrateStorage;
@@ -10,6 +12,7 @@ import me.linoxgh.cratesenhanced.data.CrateType;
 import me.linoxgh.cratesenhanced.data.MessageStorage;
 import me.linoxgh.cratesenhanced.data.rewards.Reward;
 import me.linoxgh.cratesenhanced.gui.ListRewardMenu;
+import me.linoxgh.cratesenhanced.gui.MenuType;
 import org.bukkit.Bukkit;
 import org.bukkit.Effect;
 import org.bukkit.Location;
@@ -19,6 +22,7 @@ import org.bukkit.Sound;
 import org.bukkit.block.Block;
 import org.bukkit.block.BlockState;
 import org.bukkit.block.Lidded;
+import org.bukkit.entity.Item;
 import org.bukkit.entity.Player;
 import org.bukkit.event.Event;
 import org.bukkit.event.EventHandler;
@@ -26,6 +30,7 @@ import org.bukkit.event.Listener;
 import org.bukkit.event.block.Action;
 import org.bukkit.event.block.BlockBreakEvent;
 import org.bukkit.event.block.BlockPlaceEvent;
+import org.bukkit.event.entity.ItemMergeEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.inventory.EquipmentSlot;
 import org.bukkit.inventory.ItemStack;
@@ -43,6 +48,11 @@ public class CrateListeners implements Listener {
         this.messages = messages;
         cooldowns = new HashSet<>();
         Bukkit.getPluginManager().registerEvents(this, plugin);
+    }
+
+    private final Set<UUID> unmergeableStacks = new HashSet<>();
+    public void markUnmergeable(@NotNull Item item) {
+        unmergeableStacks.add(item.getUniqueId());
     }
 
     @EventHandler
@@ -73,7 +83,9 @@ public class CrateListeners implements Listener {
         if (heldItem == null || !heldItem.isSimilar(type.getKey())) {
             ListRewardMenu menu = new ListRewardMenu(type);
             if (menu.getInventories().length == 0) return;
-            p.openInventory(menu.getInventories()[0]);
+            //plugin.getGuiTracker().addToListTracker(p.getUniqueId(), menu);
+            //plugin.getGuiTracker().addToMenuTracker(p.getUniqueId(), MenuType.LIST_REWARD);
+            //p.openInventory(menu.getInventories()[0]);
 
         } else {
             int newAmount = heldItem.getAmount() - type.getKey().getAmount();
@@ -117,6 +129,19 @@ public class CrateListeners implements Listener {
         }
     }
 
+    @EventHandler
+    public void onMerge(ItemMergeEvent e) {
+        if (
+                unmergeableStacks.contains(e.getEntity().getUniqueId())
+             || unmergeableStacks.contains(e.getTarget().getUniqueId())
+        ) e.setCancelled(true);
+    }
+
+    @EventHandler
+    public void onItemRemoves(EntityRemoveFromWorldEvent e) {
+        if (e.getEntity() instanceof Item) unmergeableStacks.remove(e.getEntity().getUniqueId());
+    }
+
     private void playCrateAnimations(@NotNull Crate crate, @NotNull Player p, @NotNull Reward<?> reward, @NotNull ItemStack heldItem, int amount) {
         heldItem.setAmount(amount);
 
@@ -145,12 +170,11 @@ public class CrateListeners implements Listener {
                     }
 
                     Bukkit.getScheduler().scheduleSyncDelayedTask(plugin, () -> {
-                        Location topLoc = loc.set(loc.getX(), loc.getY() + 1D, loc.getZ()).toCenterLocation();
+                        Location topLoc = loc.clone().toCenterLocation().add(0,0.75,0);
 
                         loc.getWorld().spawnParticle(Particle.EXPLOSION_LARGE, topLoc, 1);
                         loc.getWorld().playSound(loc, Sound.ENTITY_ARROW_HIT_PLAYER, 1F, 1F);
                         reward.giveReward(p, loc);
-
                         Bukkit.getScheduler().scheduleSyncDelayedTask(plugin, () -> {
                             if (isChest) {
                                 Lidded chest = (Lidded) b;
@@ -158,7 +182,7 @@ public class CrateListeners implements Listener {
                             }
                             cooldowns.remove(crate.getPos());
                         }, 20L);
-                    }, 20L);
+                    }, 5L);
                 }, 20L);
             }, 20L);
         }, 20L);

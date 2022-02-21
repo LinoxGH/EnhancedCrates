@@ -10,12 +10,15 @@ import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
+import java.util.Map;
+
 public class EditCommand extends Command {
     private final CrateStorage crates;
     private final GUITracker guiTracker;
     private final MessageStorage messages;
 
-    EditCommand(@NotNull CrateStorage crates, @NotNull GUITracker guiTracker, @NotNull MessageStorage messages) {
+    EditCommand(@NotNull String name, @NotNull Map<String, Command> commandMap, @NotNull CrateStorage crates, @NotNull GUITracker guiTracker, @NotNull MessageStorage messages) {
+        super(name, commandMap);
         this.crates = crates;
         this.guiTracker = guiTracker;
         this.messages = messages;

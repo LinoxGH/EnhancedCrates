@@ -3,13 +3,19 @@ package me.linoxgh.cratesenhanced.data.rewards;
 import java.util.HashMap;
 import java.util.Map;
 
+import me.linoxgh.cratesenhanced.CratesEnhanced;
+import org.bukkit.Bukkit;
 import org.bukkit.Location;
+import org.bukkit.Sound;
+import org.bukkit.SoundCategory;
 import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Item;
 import org.bukkit.entity.Player;
 import org.bukkit.event.entity.CreatureSpawnEvent;
 import org.bukkit.inventory.ItemStack;
+import org.bukkit.util.Vector;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 public class ItemReward implements Reward<ItemStack> {
     private ItemStack reward;
@@ -36,21 +42,37 @@ public class ItemReward implements Reward<ItemStack> {
 
     @Override
     public boolean giveReward(@NotNull Player p, @NotNull Location crateLocation) {
-        Location topLoc = crateLocation.set(crateLocation.getX(), crateLocation.getY() + 1D, crateLocation.getZ()).toCenterLocation();
-        crateLocation.getWorld().spawnEntity(
-                topLoc,
-                EntityType.DROPPED_ITEM,
-                CreatureSpawnEvent.SpawnReason.CUSTOM,
-                (entity) -> {
-                    Item item = (Item) entity;
-                    item.setOwner(p.getUniqueId());
-                    item.setCanMobPickup(false);
-                    item.setCanPlayerPickup(true);
-                    item.setWillAge(true);
-                    item.setPickupDelay(20);
-                    item.setItemStack(reward.clone());
-                }
-        );
+        Location center = crateLocation.clone().toCenterLocation();
+        Location topLoc = center.clone().add(0,0.5,0);
+        Vector direction = p.getLocation().subtract(center).toVector().setY(0).normalize().multiply(0.12);
+        direction.setY(direction.getY() + 0.1);
+
+        int iterations = Math.min(reward.getAmount(), 16);
+        int itemsPerIteration = (int)Math.ceil((double)reward.getAmount() / iterations);
+        int toDrop = reward.getAmount();
+        for (int i = 0;i < reward.getAmount();i++) {
+            int now = Math.min(toDrop, itemsPerIteration);
+            if (now <= 0) break;
+            toDrop -= now;
+            Bukkit.getScheduler().runTaskLater(CratesEnhanced.getPlugin(CratesEnhanced.class), () -> {
+                crateLocation.getWorld().playSound(crateLocation, Sound.ENTITY_ITEM_PICKUP, SoundCategory.BLOCKS, 1, 1);
+                crateLocation.getWorld().spawnEntity(
+                        topLoc,
+                        EntityType.DROPPED_ITEM,
+                        CreatureSpawnEvent.SpawnReason.CUSTOM,
+                        (entity) -> {
+                            Item item = (Item) entity;
+                            item.setOwner(p.getUniqueId());
+                            item.setCanMobPickup(false);
+                            item.setCanPlayerPickup(true);
+                            item.setWillAge(true);
+                            item.setPickupDelay(20);
+                            item.setItemStack(reward.clone().asQuantity(now));
+                            CratesEnhanced.getCrateListeners().markUnmergeable(item);
+                            item.setVelocity(item.getVelocity().multiply(0.5).add(direction));
+                        });
+                }, i);
+        }
         return true;
     }
 

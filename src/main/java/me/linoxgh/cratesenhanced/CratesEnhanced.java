@@ -26,6 +26,10 @@ public class CratesEnhanced extends JavaPlugin {
     private final GUITracker guiTracker = new GUITracker();
     private IOManager ioManager;
 
+    public GUITracker getGuiTracker() { return guiTracker; }
+
+    private static CrateListeners crateListeners;
+    private static GuiListeners guiListeners;
     private static boolean isVaultEnabled = false;
     private static Economy econ;
 
@@ -67,8 +71,8 @@ public class CratesEnhanced extends JavaPlugin {
 
         getCommand("crates").setExecutor(new MainCommand(crateStorage, guiTracker, messageStorage));
 
-        new CrateListeners(this, crateStorage, messageStorage);
-        new GuiListeners(this, crateStorage, guiTracker);
+        crateListeners = new CrateListeners(this, crateStorage, messageStorage);
+        guiListeners = new GuiListeners(this, crateStorage, guiTracker);
 
         if (getConfig().getBoolean("metrics-enabled")) enableMetrics();
     }
@@ -114,6 +118,7 @@ public class CratesEnhanced extends JavaPlugin {
     public static @Nullable Economy getEcon() {
         return econ;
     }
+    public static CrateListeners getCrateListeners() { return crateListeners; }
 
     private void enableMetrics() {
         new Metrics(this, 12500);

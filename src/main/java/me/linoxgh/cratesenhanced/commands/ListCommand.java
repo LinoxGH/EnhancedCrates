@@ -23,7 +23,8 @@ public class ListCommand extends Command {
     private final GUITracker guiTracker;
     private final MessageStorage messages;
 
-    ListCommand(@NotNull CrateStorage crates, @NotNull GUITracker guiTracker, @NotNull MessageStorage messages) {
+    ListCommand(@NotNull String name, @NotNull Map<String, Command> commandMap, @NotNull CrateStorage crates, @NotNull GUITracker guiTracker, @NotNull MessageStorage messages) {
+        super(name, commandMap);
         this.crates = crates;
         this.guiTracker = guiTracker;
         this.messages = messages;

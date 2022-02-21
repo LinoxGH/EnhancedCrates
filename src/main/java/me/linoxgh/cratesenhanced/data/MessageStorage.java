@@ -13,7 +13,7 @@ public class MessageStorage {
         return messages;
     }
     public @NotNull String getMessage(@NotNull String key) {
-        return messages.get(key) == null ? "ERROR" : messages.get(key);
+        return messages.getOrDefault(key, "§cNo translation found for '" + key + "'");
     }
     public void addMessage(@NotNull String key, @NotNull String message) {
         messages.put(key, ChatColor.translateAlternateColorCodes('&', message));
