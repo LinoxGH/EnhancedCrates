@@ -42,8 +42,9 @@ public class ItemReward implements Reward<ItemStack> {
 
     @Override
     public boolean giveReward(@NotNull Player p, @NotNull Location crateLocation) {
-        Location topLoc = crateLocation.clone().toCenterLocation().add(0,0.5,0);
-        Vector direction = p.getLocation().subtract(crateLocation).toVector().setY(0).normalize().multiply(0.12);
+        Location center = crateLocation.clone().toCenterLocation();
+        Location topLoc = center.clone().add(0,0.5,0);
+        Vector direction = p.getLocation().subtract(center).toVector().setY(0).normalize().multiply(0.12);
         direction.setY(direction.getY() + 0.1);
 
         int iterations = Math.min(reward.getAmount(), 16);
