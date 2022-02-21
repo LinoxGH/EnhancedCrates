@@ -83,9 +83,9 @@ public class CrateListeners implements Listener {
         if (heldItem == null || !heldItem.isSimilar(type.getKey())) {
             ListRewardMenu menu = new ListRewardMenu(type);
             if (menu.getInventories().length == 0) return;
-            plugin.getGuiTracker().addToListTracker(p.getUniqueId(), menu);
-            plugin.getGuiTracker().addToMenuTracker(p.getUniqueId(), MenuType.LIST_REWARD);
-            p.openInventory(menu.getInventories()[0]);
+            //plugin.getGuiTracker().addToListTracker(p.getUniqueId(), menu);
+            //plugin.getGuiTracker().addToMenuTracker(p.getUniqueId(), MenuType.LIST_REWARD);
+            //p.openInventory(menu.getInventories()[0]);
 
         } else {
             int newAmount = heldItem.getAmount() - type.getKey().getAmount();
