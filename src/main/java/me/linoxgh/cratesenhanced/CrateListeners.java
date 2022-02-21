@@ -175,7 +175,6 @@ public class CrateListeners implements Listener {
                         loc.getWorld().spawnParticle(Particle.EXPLOSION_LARGE, topLoc, 1);
                         loc.getWorld().playSound(loc, Sound.ENTITY_ARROW_HIT_PLAYER, 1F, 1F);
                         reward.giveReward(p, loc);
-
                         Bukkit.getScheduler().scheduleSyncDelayedTask(plugin, () -> {
                             if (isChest) {
                                 Lidded chest = (Lidded) b;
@@ -183,7 +182,7 @@ public class CrateListeners implements Listener {
                             }
                             cooldowns.remove(crate.getPos());
                         }, 20L);
-                    }, 20L);
+                    }, 5L);
                 }, 20L);
             }, 20L);
         }, 20L);
