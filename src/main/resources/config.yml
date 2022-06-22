@@ -45,7 +45,7 @@ messages:
       cmd-delete1: "&e- &aDeletes the crate."
       cmd-delete2: "&e- &cThis will also delete the block in that position!"
       cmd-edit1: "&e- &aOpens a gui to edit the crate type."
-      cmd-give1: "&e- &aGives a crate key or a random reward."
+      cmd-give1: "&e- &aGives an amount crate keys or random rewards."
       cmd-give2: "&e- &aWhen silent, no success message will be printed."
 
     create:
