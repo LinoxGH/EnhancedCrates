@@ -9,8 +9,8 @@ import org.bukkit.inventory.meta.ItemMeta;
 import org.jetbrains.annotations.NotNull;
 
 public class AddItemGroupRewardMenu {
-    private final int[] BORDER_SLOTS = {0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 17, 18, 19, 20, 21, 23, 24, 25, 26, 27, 35, 36, 37, 38, 39, 40, 41, 42, 43, 44};
-    private static final int[] CLICKABLE = {10, 11, 12, 14, 15, 16};
+    private final int[] BORDER_SLOTS = {0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 17, 18, 19, 20, 21, 23, 24, 25, 26, 27, 35, 36, 37, 38, 39, 40, 41, 42};
+    private static final int[] CLICKABLE = {10, 11, 12, 14, 15, 16, 43, 44};
     private static final int[] REPLACEABLE = {28, 29, 30, 31, 32, 33, 34};
 
     private final Inventory inv;
@@ -86,5 +86,17 @@ public class AddItemGroupRewardMenu {
         helpMeta.displayName(Component.text("§bPut the item stacks in the empty slots"));
         help.setItemMeta(helpMeta);
         inv.setItem(22, help);
+
+        ItemStack cancel = new ItemStack(Material.BARRIER);
+        ItemMeta cancelMeta = cancel.getItemMeta();
+        cancelMeta.displayName(Component.text("§cCANCEL"));
+        cancel.setItemMeta(cancelMeta);
+        inv.setItem(43, cancel);
+
+        ItemStack save = new ItemStack(Material.EMERALD);
+        ItemMeta saveMeta = save.getItemMeta();
+        saveMeta.displayName(Component.text("§aSAVE"));
+        save.setItemMeta(saveMeta);
+        inv.setItem(44,save);
     }
 }

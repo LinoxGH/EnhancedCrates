@@ -363,6 +363,11 @@ public class GuiListeners implements Listener {
                     case 16:
                         weight += 100;
                         break;
+
+                    case 43:
+                        cleanup(p.getUniqueId());
+                    case 44:
+                        break;
                 }
 
                 weightMeta.displayName(Component.text("§eWeight: §f" + weight));
