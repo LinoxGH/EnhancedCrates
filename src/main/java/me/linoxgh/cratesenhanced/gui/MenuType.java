@@ -6,5 +6,6 @@ public enum MenuType {
     ADD_COMMAND_REWARD,
     ADD_MONEY_REWARD,
     LIST_REWARD,
+    SIMPLIFIED_LIST_REWARD,
     CRATE_TYPE;
 }

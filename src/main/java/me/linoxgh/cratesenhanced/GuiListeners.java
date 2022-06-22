@@ -11,14 +11,7 @@ import me.linoxgh.cratesenhanced.data.rewards.ItemGroupReward;
 import me.linoxgh.cratesenhanced.data.rewards.ItemReward;
 import me.linoxgh.cratesenhanced.data.rewards.MoneyReward;
 import me.linoxgh.cratesenhanced.data.rewards.Reward;
-import me.linoxgh.cratesenhanced.gui.AddCommandRewardMenu;
-import me.linoxgh.cratesenhanced.gui.AddItemGroupRewardMenu;
-import me.linoxgh.cratesenhanced.gui.AddItemRewardMenu;
-import me.linoxgh.cratesenhanced.gui.AddMoneyRewardMenu;
-import me.linoxgh.cratesenhanced.gui.CrateTypeMenu;
-import me.linoxgh.cratesenhanced.gui.GUITracker;
-import me.linoxgh.cratesenhanced.gui.ListRewardMenu;
-import me.linoxgh.cratesenhanced.gui.MenuType;
+import me.linoxgh.cratesenhanced.gui.*;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.serializer.plain.PlainTextComponentSerializer;
 import org.bukkit.Bukkit;
@@ -69,6 +62,10 @@ public class GuiListeners implements Listener {
                 processListMenu(e, p);
                 return;
 
+            case SIMPLIFIED_LIST_REWARD:
+                processSimplifiedListRewardMenu(e, p);
+                return;
+
             case ADD_ITEM_REWARD:
             case ADD_ITEM_GROUP_REWARD:
             case ADD_COMMAND_REWARD:
@@ -98,7 +95,7 @@ public class GuiListeners implements Listener {
         Inventory inv = e.getInventory();
         switch (menu) {
             case CRATE_TYPE:
-                CrateType type = crates.getCrateType(ChatColor.stripColor(PlainTextComponentSerializer.plainText().serialize(e.getView().title())));
+                CrateType type = crates.getCrateType(ChatColor.stripColor(PlainTextComponentSerializer.plainText().serialize(e.getView().title())).replace("CratesEnhanced - ", ""));
                 if (type == null) return;
 
                 ItemStack newKey = inv.getItem(24);
@@ -317,6 +314,7 @@ public class GuiListeners implements Listener {
                         CrateType type1 = list.getType();
                         p.closeInventory();
                         p.openInventory(type1.getMenu().getInv());
+                        guiTracker.removeFromMenuTracker(p.getUniqueId());
                         guiTracker.addToMenuTracker(p.getUniqueId(), MenuType.CRATE_TYPE);
                         return;
 
@@ -328,6 +326,56 @@ public class GuiListeners implements Listener {
                         type2.removeReward(reward);
                         list.populate();
                         p.openInventory(list.getInventories()[page - 1]);
+                        guiTracker.removeFromMenuTracker(p.getUniqueId());
+                        guiTracker.addToMenuTracker(p.getUniqueId(), MenuType.LIST_REWARD);
+                        guiTracker.addToListTracker(p.getUniqueId(), list);
+                        return;
+                }
+            }
+        }
+    }
+
+    private void processSimplifiedListRewardMenu(@NotNull InventoryClickEvent e, @NotNull Player p) {
+        SimplifiedListRewardMenu list = guiTracker.getFromSimplifiedListTracker(p.getUniqueId());
+        if (list == null) return;
+
+        String title = ChatColor.stripColor(PlainTextComponentSerializer.plainText().serialize(e.getView().title())).replace("Reward List - ", "");
+        int page;
+        try {
+            page = Integer.parseInt(title.split("/")[0]);
+        } catch (NumberFormatException ignored) {
+            return;
+        }
+
+        for (int clickableSlot : ListRewardMenu.getClickableSlots()) {
+            if (e.getRawSlot() == clickableSlot) {
+                switch (clickableSlot) {
+                    case 47:
+                        if (page == 1) {
+                            p.openInventory(list.getInventories()[list.getInventories().length - 1]);
+                            guiTracker.removeFromMenuTracker(p.getUniqueId());
+                            guiTracker.addToMenuTracker(p.getUniqueId(), MenuType.SIMPLIFIED_LIST_REWARD);
+                            guiTracker.addToSimplifiedListTracker(p.getUniqueId(), list);
+                            return;
+                        }
+                        p.openInventory(list.getInventories()[page - 2]);
+                        guiTracker.removeFromMenuTracker(p.getUniqueId());
+                        guiTracker.addToMenuTracker(p.getUniqueId(), MenuType.SIMPLIFIED_LIST_REWARD);
+                        guiTracker.addToSimplifiedListTracker(p.getUniqueId(), list);
+                        return;
+
+                    case 51:
+                        if (page == list.getInventories().length) {
+                            p.openInventory(list.getInventories()[0]);
+                            guiTracker.removeFromMenuTracker(p.getUniqueId());
+                            guiTracker.addToMenuTracker(p.getUniqueId(), MenuType.SIMPLIFIED_LIST_REWARD);
+                            guiTracker.addToSimplifiedListTracker(p.getUniqueId(), list);
+                            return;
+                        }
+                        p.openInventory(list.getInventories()[page]);
+                        guiTracker.removeFromMenuTracker(p.getUniqueId());
+                        guiTracker.addToMenuTracker(p.getUniqueId(), MenuType.SIMPLIFIED_LIST_REWARD);
+                        guiTracker.addToSimplifiedListTracker(p.getUniqueId(), list);
                         return;
                 }
             }
@@ -493,5 +541,6 @@ public class GuiListeners implements Listener {
         guiTracker.removeFromCrateTypeTracker(id);
         guiTracker.removeFromMenuTracker(id);
         guiTracker.removeFromListTracker(id);
+        guiTracker.removeFromSimplifiedListTracker(id);
     }
 }

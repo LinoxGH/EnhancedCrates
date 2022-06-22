@@ -19,10 +19,13 @@ permissions:
   crates.*:
     description: "Master permission node for the whole plugin."
     default: op
-    children: [ crates.use.*, crates.admin ]
+    children: [ crates.use.*, crates.view.*, crates.admin ]
   crates.use.*:
     description: "Master permission node for using all crate types."
     default: true
+  crates.view.*:
+    description: "Master permission node for viewing all crate types' rewards."
+    default: op
 
   crates.admin:
     description: "Admin permission node for all editing, creating and deleting."

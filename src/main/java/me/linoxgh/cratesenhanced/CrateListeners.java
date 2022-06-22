@@ -13,6 +13,7 @@ import me.linoxgh.cratesenhanced.data.MessageStorage;
 import me.linoxgh.cratesenhanced.data.rewards.Reward;
 import me.linoxgh.cratesenhanced.gui.ListRewardMenu;
 import me.linoxgh.cratesenhanced.gui.MenuType;
+import me.linoxgh.cratesenhanced.gui.SimplifiedListRewardMenu;
 import org.bukkit.Bukkit;
 import org.bukkit.Effect;
 import org.bukkit.Location;
@@ -80,12 +81,13 @@ public class CrateListeners implements Listener {
         if (!p.hasPermission("crates.use.*") && !p.hasPermission("crates.use." + crate.getCrateType())) return;
 
         ItemStack heldItem = e.getItem();
-        if (heldItem == null || !heldItem.isSimilar(type.getKey())) {
-            ListRewardMenu menu = new ListRewardMenu(type);
+        if (heldItem == null || !heldItem.isSimilar(type.getKey())
+                || !p.hasPermission("crates.view.*") || !p.hasPermission("crates.view." + crate.getCrateType())) {
+            SimplifiedListRewardMenu menu = new SimplifiedListRewardMenu(type);
             if (menu.getInventories().length == 0) return;
-            //plugin.getGuiTracker().addToListTracker(p.getUniqueId(), menu);
-            //plugin.getGuiTracker().addToMenuTracker(p.getUniqueId(), MenuType.LIST_REWARD);
-            //p.openInventory(menu.getInventories()[0]);
+            p.openInventory(menu.getInventories()[0]);
+            plugin.getGuiTracker().addToSimplifiedListTracker(p.getUniqueId(), menu);
+            plugin.getGuiTracker().addToMenuTracker(p.getUniqueId(), MenuType.SIMPLIFIED_LIST_REWARD);
 
         } else {
             int newAmount = heldItem.getAmount() - type.getKey().getAmount();

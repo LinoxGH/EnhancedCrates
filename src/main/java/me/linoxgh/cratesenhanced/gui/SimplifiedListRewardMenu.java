@@ -18,15 +18,15 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.jetbrains.annotations.NotNull;
 
-public class ListRewardMenu {
-    private final int[] BORDER_SLOTS = {45, 46, 48, 50, 52};
-    private static final int[] CLICKABLE = {0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 32, 33, 34, 35, 36, 37, 38, 39, 40, 41, 42, 43, 44, 47, 51, 53};
+public class SimplifiedListRewardMenu {
+    private final int[] BORDER_SLOTS = {45, 46, 48, 50, 52, 53};
+    private static final int[] CLICKABLE = {0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 32, 33, 34, 35, 36, 37, 38, 39, 40, 41, 42, 43, 44, 47, 51};
     private static final int[] REPLACEABLE = { };
 
     private final CrateType type;
     private Inventory[] inventories;
 
-    public ListRewardMenu(@NotNull CrateType type) {
+    public SimplifiedListRewardMenu(@NotNull CrateType type) {
         this.type = type;
         inventories = new Inventory[0];
         populate();
@@ -78,12 +78,6 @@ public class ListRewardMenu {
             next.setItemMeta(nextMeta);
             inv.setItem(51, next);
 
-            ItemStack back = new ItemStack(Material.BARRIER);
-            ItemMeta backMeta = back.getItemMeta();
-            backMeta.displayName(Component.text("§cBACK"));
-            back.setItemMeta(backMeta);
-            inv.setItem(53, back);
-            
             inventories[0] = inv;
             return;
         }
@@ -123,12 +117,6 @@ public class ListRewardMenu {
             next.setItemMeta(nextMeta);
             inv.setItem(51, next);
 
-            ItemStack back = new ItemStack(Material.BARRIER);
-            ItemMeta backMeta = back.getItemMeta();
-            backMeta.displayName(Component.text("§cBACK"));
-            back.setItemMeta(backMeta);
-            inv.setItem(53, back);
-
             for (int slot = 0; slot < 45; slot++) {
                 if ((page * 45 + slot) >= rewards.size()) break;
                 Reward<?> reward = rewards.get(page * 45 + slot);
@@ -141,9 +129,7 @@ public class ListRewardMenu {
                     ItemMeta symbolMeta = symbol.getItemMeta();
                     symbolMeta.displayName(Component.text("§9Item Group Reward"));
                     List<Component> lore = new ArrayList<>();
-                    for (ItemStack rewardStack : itemGroup) {
-                        lore.add(Component.text("§r§6" + rewardStack.getAmount() + "§3x §f- §r").append(rewardStack.displayName()));
-                    }
+                    lore.add(Component.text("§6[Click] §ato see items in this group."));
                     symbolMeta.lore(lore);
                     symbol.setItemMeta(symbolMeta);
 
@@ -154,7 +140,7 @@ public class ListRewardMenu {
                     ItemMeta symbolMeta = symbol.getItemMeta();
                     symbolMeta.displayName(Component.text("§9Command Reward"));
                     List<Component> lore = new ArrayList<>();
-                    lore.add(Component.text("§r" + ((CommandReward) reward).getReward()));
+                    lore.add(Component.text(((CommandReward) reward).getReward()));
                     symbolMeta.lore(lore);
                     symbol.setItemMeta(symbolMeta);
 
@@ -165,7 +151,7 @@ public class ListRewardMenu {
                     ItemMeta symbolMeta = symbol.getItemMeta();
                     symbolMeta.displayName(Component.text("§9Money Reward"));
                     List<Component> lore = new ArrayList<>();
-                    lore.add(Component.text("§r§6Money: §9" + ((MoneyReward) reward).getReward()));
+                    lore.add(Component.text("§6Money: §9" + ((MoneyReward) reward).getReward()));
                     symbolMeta.lore(lore);
                     symbol.setItemMeta(symbolMeta);
 

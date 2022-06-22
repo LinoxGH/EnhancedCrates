@@ -12,6 +12,7 @@ public class GUITracker {
     private final Map<UUID, MenuType> menuTracker = new HashMap<>();
     private final Map<UUID, ListRewardMenu> listTracker = new HashMap<>();
     private final Map<UUID, String> crateTypeTracker = new HashMap<>();
+    private final Map<UUID, SimplifiedListRewardMenu> simplifiedListTracker = new HashMap<>();
 
     public @Nullable MenuType getFromMenuTracker(@NotNull UUID id) {
         return menuTracker.get(id);
@@ -41,5 +42,15 @@ public class GUITracker {
     }
     public void removeFromCrateTypeTracker(@NotNull UUID id) {
         crateTypeTracker.remove(id);
+    }
+
+    public @Nullable SimplifiedListRewardMenu getFromSimplifiedListTracker(@NotNull UUID id) {
+        return simplifiedListTracker.get(id);
+    }
+    public void addToSimplifiedListTracker(@NotNull UUID id, @NotNull SimplifiedListRewardMenu menu) {
+        simplifiedListTracker.put(id, menu);
+    }
+    public void removeFromSimplifiedListTracker(@NotNull UUID id) {
+        simplifiedListTracker.remove(id);
     }
 }
