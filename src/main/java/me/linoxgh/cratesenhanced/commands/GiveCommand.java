@@ -26,7 +26,7 @@ public class GiveCommand extends Command {
 
     @Override
     public boolean execute(@NotNull CommandSender sender, @NotNull String[] args) {
-        if (args.length < 4 || args.length > 5) return false;
+        if (args.length < 4 || args.length > 6) return false;
 
         Player p = Bukkit.getPlayer(args[1]);
         if (p == null || !p.isOnline()) {
@@ -39,39 +39,45 @@ public class GiveCommand extends Command {
             sender.sendMessage(messages.getMessage("crates.give.invalid-cratetype"));
             return true;
         }
+        boolean isSilent = (args.length == 6) || (args.length == 5 && args[4].equals("silent"));
+        int amount = args.length == 6 ? Integer.parseInt(args[4]) : (args.length == 5 && !isSilent ? Integer.parseInt(args[4]) : 1);
 
         switch (args[2]) {
             case "key":
-                giveKey(p, crate);
-                if (args.length != 5 || !args[4].equals("silent")) {
+                giveKey(p, crate, amount);
+                if (!isSilent) {
                     sender.sendMessage(messages.getMessage("crates.give.success"));
                     return true;
                 }
 
             case "reward":
-                Reward<?> reward = crate.getRandomReward();
-                if (reward == null) {
-                    sender.sendMessage(messages.getMessage("crates.give.no-reward"));
-                    return true;
-                }
-                if (!reward.giveReward(p)) {
-                    sender.sendMessage(messages.getMessage("crates.give.fail"));
-                    return true;
-                }
-                if (args.length != 5 || !args[4].equals("silent")) {
-                    sender.sendMessage(messages.getMessage("crates.give.success"));
-                    return true;
+                for (int i = 0; i < amount; i++) {
+                    Reward<?> reward = crate.getRandomReward();
+                    if (reward == null) {
+                        sender.sendMessage(messages.getMessage("crates.give.no-reward"));
+                        return true;
+                    }
+                    if (!reward.giveReward(p)) {
+                        sender.sendMessage(messages.getMessage("crates.give.fail"));
+                        return true;
+                    }
+                    if (isSilent) {
+                        sender.sendMessage(messages.getMessage("crates.give.success"));
+                        return true;
+                    }
                 }
             default:
                 return false;
         }
     }
 
-    private void giveKey(@NotNull Player p, @NotNull CrateType crate) {
-        HashMap<Integer, ItemStack> unfits = p.getInventory().addItem(crate.getKey().clone());
-        if (!(unfits.isEmpty())) {
-            for (Map.Entry<Integer, ItemStack> entry : unfits.entrySet()) {
-                p.getLocation().getWorld().dropItem(p.getLocation(), entry.getValue());
+    private void giveKey(@NotNull Player p, @NotNull CrateType crate, int amount) {
+        for (int i = 0; i < amount; i++) {
+            HashMap<Integer, ItemStack> unfits = p.getInventory().addItem(crate.getKey().clone());
+            if (!(unfits.isEmpty())) {
+                for (Map.Entry<Integer, ItemStack> entry : unfits.entrySet()) {
+                    p.getLocation().getWorld().dropItem(p.getLocation(), entry.getValue());
+                }
             }
         }
     }

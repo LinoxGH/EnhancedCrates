@@ -63,7 +63,7 @@ public class HelpCommand extends Command {
             messages.add(" ");
         }
         if (sender.hasPermission("crates.give")) {
-            messages.add("§6/crates give §9<player> §6key|reward §9<crate-type> §6[silent]");
+            messages.add("§6/crates give §9<player> §6key|reward §9<crate-type> §6[amount] §6[silent]");
             messages.add(messageStorage.getMessage("commands.help.cmd-give1"));
             messages.add(messageStorage.getMessage("commands.help.cmd-give2"));
             messages.add(" ");
