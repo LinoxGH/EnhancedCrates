@@ -30,6 +30,7 @@ messages:
   gameplay:
     crate-interaction:
       break: "§aSuccessfully removed the crate."
+      earn-money: "§aYou earned §6%MONEY%$!"
 
 
   commands:

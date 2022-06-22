@@ -10,8 +10,8 @@ import me.linoxgh.cratesenhanced.data.Crate;
 import me.linoxgh.cratesenhanced.data.CrateStorage;
 import me.linoxgh.cratesenhanced.data.CrateType;
 import me.linoxgh.cratesenhanced.data.MessageStorage;
+import me.linoxgh.cratesenhanced.data.rewards.MoneyReward;
 import me.linoxgh.cratesenhanced.data.rewards.Reward;
-import me.linoxgh.cratesenhanced.gui.ListRewardMenu;
 import me.linoxgh.cratesenhanced.gui.MenuType;
 import me.linoxgh.cratesenhanced.gui.SimplifiedListRewardMenu;
 import org.bukkit.Bukkit;
@@ -177,6 +177,9 @@ public class CrateListeners implements Listener {
                         loc.getWorld().spawnParticle(Particle.EXPLOSION_LARGE, topLoc, 1);
                         loc.getWorld().playSound(loc, Sound.ENTITY_ARROW_HIT_PLAYER, 1F, 1F);
                         reward.giveReward(p, loc);
+                        if (reward instanceof MoneyReward) {
+                            p.sendMessage(messages.getMessage("gameplay.crate-interaction.earn-money").replace("%MONEY%", reward.getReward().toString()));
+                        }
                         Bukkit.getScheduler().scheduleSyncDelayedTask(plugin, () -> {
                             if (isChest) {
                                 Lidded chest = (Lidded) b;
