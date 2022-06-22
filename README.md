@@ -39,7 +39,7 @@ All done! Now you can right click to open the crate and get a random reward.
 - /crates delete <crate-name> - Deletes a crate.
 - /crates type add|delete <crate-type> - Adds or deletes a crate type. The held item will be the key for the created crate type.
 - /crates edit <crate-type> - Opens a GUI to let you edit the rewards and the key of the crate type.
-- /crates give <player> key|reward <crate-type> [amount] [silent] - Gives an amount of keys or random rewards of the crate type to the player. A silent give won't print out any messages, hence more suitable for other plugins' use.
+- /crates give <player> key|reward <crate-type> [amount] [silent] - Gives an amount of keys or random rewards of the crate type to the player. When silent, no success message will be printed, hence more suitable for other plugins' use.
 
 ### Permissions:
 - crates.* - Master permission node for the whole plugin.
