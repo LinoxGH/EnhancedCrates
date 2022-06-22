@@ -210,7 +210,7 @@ public class GuiListeners implements Listener {
     }
 
     private void processCrateTypeMenu(@NotNull InventoryClickEvent e, @NotNull Player p) {
-        CrateType type = crates.getCrateType(ChatColor.stripColor(PlainTextComponentSerializer.plainText().serialize(e.getView().title())));
+        CrateType type = crates.getCrateType(ChatColor.stripColor(PlainTextComponentSerializer.plainText().serialize(e.getView().title())).replace("CratesEnhanced - ", ""));
         if (type == null) return;
 
         CrateTypeMenu crateMenu = type.getMenu();
@@ -282,29 +282,50 @@ public class GuiListeners implements Listener {
             return;
         }
 
-        for (int clickableSlot : list.getClickableSlots()) {
+        for (int clickableSlot : ListRewardMenu.getClickableSlots()) {
             if (e.getRawSlot() == clickableSlot) {
                 switch (clickableSlot) {
-                    case 46:
+                    case 47:
                         if (page == 1) {
                             p.openInventory(list.getInventories()[list.getInventories().length - 1]);
+                            guiTracker.removeFromMenuTracker(p.getUniqueId());
+                            guiTracker.addToMenuTracker(p.getUniqueId(), MenuType.LIST_REWARD);
+                            guiTracker.addToListTracker(p.getUniqueId(), list);
                             return;
                         }
-                        p.openInventory(list.getInventories()[page - 1]);
+                        p.openInventory(list.getInventories()[page - 2]);
+                        guiTracker.removeFromMenuTracker(p.getUniqueId());
+                        guiTracker.addToMenuTracker(p.getUniqueId(), MenuType.LIST_REWARD);
+                        guiTracker.addToListTracker(p.getUniqueId(), list);
                         return;
 
-                    case 52:
+                    case 51:
                         if (page == list.getInventories().length) {
                             p.openInventory(list.getInventories()[0]);
+                            guiTracker.removeFromMenuTracker(p.getUniqueId());
+                            guiTracker.addToMenuTracker(p.getUniqueId(), MenuType.LIST_REWARD);
+                            guiTracker.addToListTracker(p.getUniqueId(), list);
                             return;
                         }
-                        p.openInventory(list.getInventories()[page + 1]);
+                        p.openInventory(list.getInventories()[page]);
+                        guiTracker.removeFromMenuTracker(p.getUniqueId());
+                        guiTracker.addToMenuTracker(p.getUniqueId(), MenuType.LIST_REWARD);
+                        guiTracker.addToListTracker(p.getUniqueId(), list);
+                        return;
+
+                    case 53:
+                        CrateType type1 = list.getType();
+                        p.closeInventory();
+                        p.openInventory(type1.getMenu().getInv());
+                        guiTracker.addToMenuTracker(p.getUniqueId(), MenuType.CRATE_TYPE);
                         return;
 
                     default:
-                        CrateType type = list.getType();
-                        Reward<?> reward = type.getWeights().get((page - 1) * 45 + e.getRawSlot());
-                        type.removeReward(reward);
+                        if (e.getClickedInventory().getItem(clickableSlot) == null || e.getClickedInventory().getItem(clickableSlot).getType() == Material.AIR) return;
+
+                        CrateType type2 = list.getType();
+                        Reward<?> reward = type2.getWeights().get((page - 1) * 45 + clickableSlot);
+                        type2.removeReward(reward);
                         list.populate();
                         p.openInventory(list.getInventories()[page - 1]);
                         return;
@@ -365,8 +386,25 @@ public class GuiListeners implements Listener {
                         break;
 
                     case 43:
+                        String name1 = guiTracker.getFromCrateTypeTracker(p.getUniqueId());
+                        if (name1 == null) return;
+                        CrateType type1 = crates.getCrateType(name1);
+                        if (type1 == null) return;
+
                         cleanup(p.getUniqueId());
+                        p.closeInventory();
+                        p.openInventory(type1.getMenu().getInv());
+                        guiTracker.addToMenuTracker(p.getUniqueId(), MenuType.CRATE_TYPE);
+                        break;
                     case 44:
+                        String name2 = guiTracker.getFromCrateTypeTracker(p.getUniqueId());
+                        if (name2 == null) return;
+                        CrateType type2 = crates.getCrateType(name2);
+                        if (type2 == null) return;
+
+                        p.closeInventory();
+                        p.openInventory(type2.getMenu().getInv());
+                        guiTracker.addToMenuTracker(p.getUniqueId(), MenuType.CRATE_TYPE);
                         break;
                 }
 

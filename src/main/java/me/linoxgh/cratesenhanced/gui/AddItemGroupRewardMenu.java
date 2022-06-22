@@ -16,7 +16,7 @@ public class AddItemGroupRewardMenu {
     private final Inventory inv;
 
     public AddItemGroupRewardMenu() {
-        inv = Bukkit.createInventory(null, 45, Component.text("§3CratesEnhanced §e- §9Adding an Item Group Reward"));
+        inv = Bukkit.createInventory(null, 45, Component.text("§9Adding an Item Group Reward"));
         populate();
     }
 
