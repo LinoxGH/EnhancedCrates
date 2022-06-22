@@ -16,7 +16,7 @@ public class AddCommandRewardMenu {
     private final Inventory inv;
 
     public AddCommandRewardMenu() {
-        inv = Bukkit.createInventory(null, 45, Component.text("§9Adding a Command Reward"));
+        inv = Bukkit.createInventory(null, 45, Component.text("§3CratesEnhanced §e- §9Adding a Command Reward"));
         populate();
     }
 

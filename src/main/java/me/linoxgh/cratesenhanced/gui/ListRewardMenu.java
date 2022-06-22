@@ -50,7 +50,7 @@ public class ListRewardMenu {
         int pages = (type.getWeights().size() / 45) + (additional == 0 ? 0 : 1);
         if (pages == 0) {
             inventories = new Inventory[1];
-            Inventory inv = Bukkit.createInventory(null, 54, Component.text("§9Reward List §e- §21/1"));
+            Inventory inv = Bukkit.createInventory(null, 54, Component.text("§3CratesEnhanced §e- §9Reward List §e- §21/1"));
 
             ItemStack border = new ItemStack(Material.GRAY_STAINED_GLASS_PANE);
             ItemMeta borderMeta = border.getItemMeta();

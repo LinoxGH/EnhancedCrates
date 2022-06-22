@@ -22,7 +22,7 @@ public class CrateTypeMenu {
 
     public CrateTypeMenu(@NotNull CrateType type) {
         this.type = type;
-        inv = Bukkit.createInventory(null, 36, Component.text("§6CratesEnhanced §f- §9" + type.getName()));
+        inv = Bukkit.createInventory(null, 36, Component.text("§3CratesEnhanced §e- §9" + type.getName()));
         populate();
     }
 
