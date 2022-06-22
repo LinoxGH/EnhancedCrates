@@ -286,12 +286,18 @@ public class GuiListeners implements Listener {
             if (e.getRawSlot() == clickableSlot) {
                 switch (clickableSlot) {
                     case 46:
-                        if (page == 1) return;
+                        if (page == 1) {
+                            p.openInventory(list.getInventories()[list.getInventories().length - 1]);
+                            return;
+                        }
                         p.openInventory(list.getInventories()[page - 1]);
                         return;
 
                     case 52:
-                        if (page == list.getInventories().length) return;
+                        if (page == list.getInventories().length) {
+                            p.openInventory(list.getInventories()[0]);
+                            return;
+                        }
                         p.openInventory(list.getInventories()[page + 1]);
                         return;
 
