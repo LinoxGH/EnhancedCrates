@@ -138,7 +138,7 @@ public class ListRewardMenu {
                 } else if (reward instanceof CommandReward) {
                     ItemStack symbol = new ItemStack(Material.PAPER);
                     ItemMeta symbolMeta = symbol.getItemMeta();
-                    symbolMeta.displayName(Component.text("§9Item Group Reward"));
+                    symbolMeta.displayName(Component.text("§9Command Reward"));
                     List<Component> lore = new ArrayList<>();
                     lore.add(Component.text(((CommandReward) reward).getReward()));
                     symbolMeta.lore(lore);
@@ -149,7 +149,7 @@ public class ListRewardMenu {
                 } else if (reward instanceof MoneyReward) {
                     ItemStack symbol = new ItemStack(Material.GOLD_INGOT);
                     ItemMeta symbolMeta = symbol.getItemMeta();
-                    symbolMeta.displayName(Component.text("§9Item Group Reward"));
+                    symbolMeta.displayName(Component.text("§9Money Reward"));
                     List<Component> lore = new ArrayList<>();
                     lore.add(Component.text("§6Money: §9" + ((MoneyReward) reward).getReward()));
                     symbolMeta.lore(lore);
