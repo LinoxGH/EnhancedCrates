@@ -52,6 +52,7 @@ messages:
       cmd-reward1: "&e- &aAdds the held item as reward to the crate type."
       cmd-reward2: "&e- &aAdds an amount of money as reward to the crate type."
       cmd-reward3: "&e- &aAdds a command as reward to the crate type."
+      cmd-reward4: "&e- &aDo not include a '/' character."
 
     create:
       invalid-world: "&4Please enter a valid world name."

@@ -35,7 +35,7 @@ public class HelpCommand extends Command {
             }
         }
 
-        List<String> messages = new ArrayList<>(18);
+        List<String> messages = new ArrayList<>(32);
         if (sender.hasPermission("crates.main")) {
             messages.add("§6/crates help §9[page]");
             messages.add(messageStorage.getMessage("commands.help.cmd-help1"));
@@ -82,6 +82,7 @@ public class HelpCommand extends Command {
             messages.add(messageStorage.getMessage("commands.help.cmd-reward2"));
             messages.add("§6/crates reward §9<crate-type> §6command §9<weight> <command>");
             messages.add(messageStorage.getMessage("commands.help.cmd-reward3"));
+            messages.add(messageStorage.getMessage("commands.help.cmd-reward4"));
             messages.add(" ");
         }
 
