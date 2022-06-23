@@ -23,6 +23,7 @@ public class MainCommand implements CommandExecutor {
     private final EditCommand edit;
     private final GiveCommand give;
     private final TypeCommand type;
+    private final RewardCommand reward;
 
     public MainCommand(@NotNull CrateStorage crates, @NotNull GUITracker guiTracker, @NotNull MessageStorage messages) {
         this.help   = new HelpCommand  ("help",   map,  messages);
@@ -32,6 +33,7 @@ public class MainCommand implements CommandExecutor {
         this.edit   = new EditCommand  ("edit",   map,  crates, guiTracker, messages);
         this.give   = new GiveCommand  ("give",   map,  crates, messages);
         this.type   = new TypeCommand  ("type",   map,  crates, messages);
+        this.reward = new RewardCommand("reward", map,  crates, messages);
 
         this.messages = messages;
     }

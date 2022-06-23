@@ -96,28 +96,32 @@ public class GuiListeners implements Listener {
         switch (menu) {
             case CRATE_TYPE:
                 CrateType type = crates.getCrateType(ChatColor.stripColor(PlainTextComponentSerializer.plainText().serialize(e.getView().title())).replace("CratesEnhanced - ", ""));
-                if (type == null) return;
+                if (type == null) break;
 
                 ItemStack newKey = inv.getItem(24);
-                if (newKey == null) return;
+                if (newKey == null) break;
                 type.setKey(newKey);
                 break;
 
             case ADD_ITEM_REWARD:
                 String name1 = guiTracker.getFromCrateTypeTracker(id);
-                if (name1 == null) return;
+                if (name1 == null) break;
 
                 CrateType type1 = crates.getCrateType(name1);
-                if (type1 == null) return;
+                if (type1 == null) break;
 
                 ItemStack rewardItem = inv.getItem(31);
+                if (rewardItem == null || rewardItem.getAmount() == 0 || rewardItem.getType().isEmpty() || rewardItem.getType().isAir()){
+                    break;
+                }
+
                 ItemStack weightItem1 = inv.getItem(13);
-                if (weightItem1 == null) return;
+                if (weightItem1 == null) break;
                 ItemMeta weightMeta1 = weightItem1.getItemMeta();
-                if (weightMeta1 == null) return;
+                if (weightMeta1 == null) break;
                 String weightName1 = ChatColor.stripColor(PlainTextComponentSerializer.plainText().serialize(weightMeta1.displayName()));
                 int weight1 = Integer.parseInt(weightName1.replace("Weight: ", ""));
-                if (weight1 == 0) break;
+                if (weight1 <= 0) break;
 
                 ItemReward itemReward = new ItemReward(rewardItem, weight1);
                 type1.addReward(weight1, itemReward);
@@ -125,24 +129,25 @@ public class GuiListeners implements Listener {
 
             case ADD_ITEM_GROUP_REWARD:
                 String name2 = guiTracker.getFromCrateTypeTracker(id);
-                if (name2 == null) return;
+                if (name2 == null) break;
 
                 CrateType type2 = crates.getCrateType(name2);
-                if (type2 == null) return;
+                if (type2 == null) break;
 
                 List<ItemStack> rewardItems = new ArrayList<>();
                 for (int slot = 28; slot < 35; slot++) {
                     ItemStack item = inv.getItem(slot);
-                    if (item != null) rewardItems.add(item);
+                    if (item != null && item.getAmount() != 0 && !item.getType().isEmpty() && !item.getType().isAir()) rewardItems.add(item);
                 }
+                if (rewardItems.size() < 1) break;
 
                 ItemStack weightItem2 = inv.getItem(13);
-                if (weightItem2 == null) return;
+                if (weightItem2 == null) break;
                 ItemMeta weightMeta2 = weightItem2.getItemMeta();
-                if (weightMeta2 == null) return;
+                if (weightMeta2 == null) break;
                 String weightName2 = ChatColor.stripColor(PlainTextComponentSerializer.plainText().serialize(weightMeta2.displayName()));
                 int weight2 = Integer.parseInt(weightName2.replace("Weight: ", ""));
-                if (weight2 == 0) break;
+                if (weight2 <= 0) break;
 
                 ItemGroupReward groupReward = new ItemGroupReward(rewardItems.toArray(new ItemStack[0]), weight2);
                 type2.addReward(weight2, groupReward);
@@ -150,23 +155,24 @@ public class GuiListeners implements Listener {
 
             case ADD_COMMAND_REWARD:
                 String name3 = guiTracker.getFromCrateTypeTracker(id);
-                if (name3 == null) return;
+                if (name3 == null) break;
 
                 CrateType type3 = crates.getCrateType(name3);
-                if (type3 == null) return;
+                if (type3 == null) break;
 
                 ItemStack book = inv.getItem(31);
                 if (book == null || (book.getType() != Material.WRITABLE_BOOK && book.getType() != Material.WRITTEN_BOOK)) return;
                 BookMeta meta = (BookMeta) book.getItemMeta();
                 String command = PlainTextComponentSerializer.plainText().serialize(meta.page(1));
+                if (command.length() < 1) break;
 
                 ItemStack weightItem3 = inv.getItem(13);
-                if (weightItem3 == null) return;
+                if (weightItem3 == null) break;
                 ItemMeta weightMeta3 = weightItem3.getItemMeta();
-                if (weightMeta3 == null) return;
+                if (weightMeta3 == null) break;
                 String weightName3 = ChatColor.stripColor(PlainTextComponentSerializer.plainText().serialize(weightMeta3.displayName()));
                 int weight3 = Integer.parseInt(weightName3.replace("Weight: ", ""));
-                if (weight3 == 0) break;
+                if (weight3 <= 0) break;
 
                 CommandReward cmdReward = new CommandReward(command, weight3);
                 type3.addReward(weight3, cmdReward);
@@ -174,25 +180,26 @@ public class GuiListeners implements Listener {
 
             case ADD_MONEY_REWARD:
                 String name4 = guiTracker.getFromCrateTypeTracker(id);
-                if (name4 == null) return;
+                if (name4 == null) break;
 
                 CrateType type4 = crates.getCrateType(name4);
-                if (type4 == null) return;
+                if (type4 == null) break;
 
                 ItemStack moneyItem = inv.getItem(31);
-                if (moneyItem == null) return;
+                if (moneyItem == null) break;
                 ItemMeta moneyMeta = moneyItem.getItemMeta();
-                if (moneyMeta == null) return;
+                if (moneyMeta == null) break;
                 String moneyName = ChatColor.stripColor(PlainTextComponentSerializer.plainText().serialize(moneyMeta.displayName()));
                 double money = Double.parseDouble(moneyName.replace("Money: ", ""));
+                if (money <= 0D) break;
 
                 ItemStack weightItem4 = inv.getItem(13);
-                if (weightItem4 == null) return;
+                if (weightItem4 == null) break;
                 ItemMeta weightMeta4 = weightItem4.getItemMeta();
-                if (weightMeta4 == null) return;
+                if (weightMeta4 == null) break;
                 String weightName4 = ChatColor.stripColor(PlainTextComponentSerializer.plainText().serialize(weightMeta4.displayName()));
                 int weight4 = Integer.parseInt(weightName4.replace("Weight: ", ""));
-                if (weight4 == 0) break;
+                if (weight4 <= 0) break;
 
                 MoneyReward moneyReward = new MoneyReward(money, weight4);
                 type4.addReward(weight4, moneyReward);

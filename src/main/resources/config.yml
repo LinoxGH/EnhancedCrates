@@ -49,6 +49,9 @@ messages:
       cmd-give2: "&e- &aWhen silent, no success message will be printed."
       cmd-list1: "&e- &aLists down all crate types or crates created."
       cmd-list2: "&e- &aOpens a gui to list the rewards of the crate type."
+      cmd-reward1: "&e- &aAdds the held item as reward to the crate type."
+      cmd-reward2: "&e- &aAdds an amount of money as reward to the crate type."
+      cmd-reward3: "&e- &aAdds a command as reward to the crate type."
 
     create:
       invalid-world: "&4Please enter a valid world name."
@@ -86,3 +89,11 @@ messages:
       header: "&e.*.-----_-----{ &3Crates &e}-----_-----.*."
       columns: "&9Crate Name &e- &9Location &e- &9Crate Type"
       cratetypes: "&9Crate Types"
+
+    reward:
+      invalid-sender: "&4This command can only be used in game."
+      invalid-cratetype: "&4Could not find the specified crate type."
+      invalid-weight: "&4You must specify a valid weight. It must be a positive integer."
+      invalid-item: "&4You must hold an item in your hand."
+      invalid-money: "&4You must specify a valid money amount. It must be a positive integer."
+      success: "&aSuccessfully added the reward to this crate type."
