@@ -19,7 +19,7 @@ import org.bukkit.inventory.meta.ItemMeta;
 import org.jetbrains.annotations.NotNull;
 
 public class SimplifiedListRewardMenu {
-    private final int[] BORDER_SLOTS = {45, 46, 48, 50, 52, 53};
+    private final int[] BORDER_SLOTS = {45, 46, 48, 49, 50, 52, 53};
     private static final int[] CLICKABLE = {0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 32, 33, 34, 35, 36, 37, 38, 39, 40, 41, 42, 43, 44, 47, 51};
     private static final int[] REPLACEABLE = { };
 
@@ -60,12 +60,6 @@ public class SimplifiedListRewardMenu {
                 inv.setItem(slot, border);
             }
 
-            ItemStack help = new ItemStack(Material.OAK_SIGN);
-            ItemMeta helpMeta = help.getItemMeta();
-            helpMeta.displayName(Component.text("§bClick a reward to remove it."));
-            help.setItemMeta(helpMeta);
-            inv.setItem(49, help);
-
             ItemStack previous = new ItemStack(Material.RED_DYE);
             ItemMeta previousMeta = previous.getItemMeta();
             previousMeta.displayName(Component.text("§cClick to go to the previous page."));
@@ -98,12 +92,6 @@ public class SimplifiedListRewardMenu {
             for (int slot : BORDER_SLOTS) {
                 inv.setItem(slot, border);
             }
-
-            ItemStack help = new ItemStack(Material.OAK_SIGN);
-            ItemMeta helpMeta = help.getItemMeta();
-            helpMeta.displayName(Component.text("§bClick a reward to remove it."));
-            help.setItemMeta(helpMeta);
-            inv.setItem(49, help);
 
             ItemStack previous = new ItemStack(Material.RED_DYE);
             ItemMeta previousMeta = previous.getItemMeta();

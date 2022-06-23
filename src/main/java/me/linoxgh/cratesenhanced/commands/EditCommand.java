@@ -17,7 +17,7 @@ public class EditCommand extends Command {
     private final GUITracker guiTracker;
     private final MessageStorage messages;
 
-    EditCommand(@NotNull String name, @NotNull Map<String, Command> commandMap, @NotNull CrateStorage crates, @NotNull GUITracker guiTracker, @NotNull MessageStorage messages) {
+    protected EditCommand(@NotNull String name, @NotNull Map<String, Command> commandMap, @NotNull CrateStorage crates, @NotNull GUITracker guiTracker, @NotNull MessageStorage messages) {
         super(name, commandMap);
         this.crates = crates;
         this.guiTracker = guiTracker;

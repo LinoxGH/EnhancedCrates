@@ -81,8 +81,8 @@ public class CrateListeners implements Listener {
         if (!p.hasPermission("crates.use.*") && !p.hasPermission("crates.use." + crate.getCrateType())) return;
 
         ItemStack heldItem = e.getItem();
-        if (heldItem == null || !heldItem.isSimilar(type.getKey())
-                || !p.hasPermission("crates.view.*") || !p.hasPermission("crates.view." + crate.getCrateType())) {
+        if ((heldItem == null || !heldItem.isSimilar(type.getKey()))
+                && ((p.hasPermission("crates.view.*") || p.hasPermission("crates.view." + crate.getCrateType())))) {
             SimplifiedListRewardMenu menu = new SimplifiedListRewardMenu(type);
             if (menu.getInventories().length == 0) return;
             p.openInventory(menu.getInventories()[0]);

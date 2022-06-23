@@ -47,6 +47,8 @@ messages:
       cmd-edit1: "&e- &aOpens a gui to edit the crate type."
       cmd-give1: "&e- &aGives an amount crate keys or random rewards."
       cmd-give2: "&e- &aWhen silent, no success message will be printed."
+      cmd-list1: "&e- &aLists down all crate types or crates created."
+      cmd-list2: "&e- &aOpens a gui to list the rewards of the crate type."
 
     create:
       invalid-world: "&4Please enter a valid world name."

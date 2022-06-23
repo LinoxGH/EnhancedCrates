@@ -13,7 +13,7 @@ public class DeleteCommand extends Command {
     private final CrateStorage crates;
     private final MessageStorage messages;
 
-    DeleteCommand(@NotNull String name, @NotNull Map<String, Command> commandMap, @NotNull CrateStorage crates, @NotNull MessageStorage messages) {
+    protected DeleteCommand(@NotNull String name, @NotNull Map<String, Command> commandMap, @NotNull CrateStorage crates, @NotNull MessageStorage messages) {
         super(name, commandMap);
         this.crates = crates;
         this.messages = messages;

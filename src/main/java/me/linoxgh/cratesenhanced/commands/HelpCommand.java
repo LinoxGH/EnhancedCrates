@@ -14,7 +14,7 @@ public class HelpCommand extends Command {
     private final HashMap<UUID, List<String[]>> cachedHelp = new HashMap<>();
     private final HashMap<UUID, Long> cacheTimestamp = new HashMap<>();
 
-    HelpCommand(@NotNull String name, @NotNull Map<String, Command> commandMap, @NotNull MessageStorage messageStorage) {
+    protected HelpCommand(@NotNull String name, @NotNull Map<String, Command> commandMap, @NotNull MessageStorage messageStorage) {
         super(name, commandMap);
         this.messageStorage = messageStorage;
     }
@@ -66,6 +66,22 @@ public class HelpCommand extends Command {
             messages.add("§6/crates give §9<player> §6key|reward §9<crate-type> §6[amount] §6[silent]");
             messages.add(messageStorage.getMessage("commands.help.cmd-give1"));
             messages.add(messageStorage.getMessage("commands.help.cmd-give2"));
+            messages.add(" ");
+        }
+        if (sender.hasPermission("crates.list")) {
+            messages.add("§6/crates list crates|types");
+            messages.add(messageStorage.getMessage("commands.help.cmd-list1"));
+            messages.add("§6/crates list rewards §9<crate-type>");
+            messages.add(messageStorage.getMessage("commands.help.cmd-list2"));
+            messages.add(" ");
+        }
+        if (sender.hasPermission("crates.edit")) {
+            messages.add("§6/crates reward §9<crate-type> §6item §9<weight>");
+            messages.add(messageStorage.getMessage("commands.help.cmd-reward1"));
+            messages.add("§6/crates reward §9<crate-type> §6money §9<weight> <amount>");
+            messages.add(messageStorage.getMessage("commands.help.cmd-reward2"));
+            messages.add("§6/crates reward §9<crate-type> §6command §9<weight> <command>");
+            messages.add(messageStorage.getMessage("commands.help.cmd-reward3"));
             messages.add(" ");
         }
 

@@ -30,13 +30,13 @@ public class GiveCommand extends Command {
 
         Player p = Bukkit.getPlayer(args[1]);
         if (p == null || !p.isOnline()) {
-            sender.sendMessage(messages.getMessage("crates.give.invalid-player"));
+            sender.sendMessage(messages.getMessage("commands.give.invalid-player"));
             return true;
         }
 
         CrateType crate = crates.getCrateType(args[3]);
         if (crate == null) {
-            sender.sendMessage(messages.getMessage("crates.give.invalid-cratetype"));
+            sender.sendMessage(messages.getMessage("commands.give.invalid-cratetype"));
             return true;
         }
         boolean isSilent = (args.length == 6) || (args.length == 5 && args[4].equals("silent"));
@@ -46,7 +46,7 @@ public class GiveCommand extends Command {
             case "key":
                 giveKey(p, crate, amount);
                 if (!isSilent) {
-                    sender.sendMessage(messages.getMessage("crates.give.success"));
+                    sender.sendMessage(messages.getMessage("commands.give.success"));
                     return true;
                 }
 
@@ -54,15 +54,15 @@ public class GiveCommand extends Command {
                 for (int i = 0; i < amount; i++) {
                     Reward<?> reward = crate.getRandomReward();
                     if (reward == null) {
-                        sender.sendMessage(messages.getMessage("crates.give.no-reward"));
+                        sender.sendMessage(messages.getMessage("commands.give.no-reward"));
                         return true;
                     }
                     if (!reward.giveReward(p)) {
-                        sender.sendMessage(messages.getMessage("crates.give.fail"));
+                        sender.sendMessage(messages.getMessage("commands.give.fail"));
                         return true;
                     }
                     if (isSilent) {
-                        sender.sendMessage(messages.getMessage("crates.give.success"));
+                        sender.sendMessage(messages.getMessage("commands.give.success"));
                         return true;
                     }
                 }

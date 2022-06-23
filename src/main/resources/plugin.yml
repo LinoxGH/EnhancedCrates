@@ -48,7 +48,7 @@ permissions:
     default: op
     children: [ crates.main ]
   crates.list:
-    description: "Permission node responsible for listing crates."
+    description: "Permission node responsible for listing command."
     default: op
     children: [ crates.main ]
 

@@ -10,6 +10,7 @@ import me.linoxgh.cratesenhanced.data.MessageStorage;
 import me.linoxgh.cratesenhanced.gui.GUITracker;
 import me.linoxgh.cratesenhanced.gui.ListRewardMenu;
 import me.linoxgh.cratesenhanced.gui.MenuType;
+import me.linoxgh.cratesenhanced.gui.SimplifiedListRewardMenu;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.event.ClickEvent;
 import org.bukkit.command.CommandSender;
@@ -23,7 +24,7 @@ public class ListCommand extends Command {
     private final GUITracker guiTracker;
     private final MessageStorage messages;
 
-    ListCommand(@NotNull String name, @NotNull Map<String, Command> commandMap, @NotNull CrateStorage crates, @NotNull GUITracker guiTracker, @NotNull MessageStorage messages) {
+    protected ListCommand(@NotNull String name, @NotNull Map<String, Command> commandMap, @NotNull CrateStorage crates, @NotNull GUITracker guiTracker, @NotNull MessageStorage messages) {
         super(name, commandMap);
         this.crates = crates;
         this.guiTracker = guiTracker;
@@ -85,11 +86,11 @@ public class ListCommand extends Command {
                     return true;
                 }
 
-                ListRewardMenu list = new ListRewardMenu(type);
+                SimplifiedListRewardMenu list = new SimplifiedListRewardMenu(type);
                 if (list.getInventories().length == 0) return true;
                 p.openInventory(list.getInventories()[0]);
-                guiTracker.addToMenuTracker(p.getUniqueId(), MenuType.LIST_REWARD);
-                guiTracker.addToListTracker(p.getUniqueId(), list);
+                guiTracker.addToMenuTracker(p.getUniqueId(), MenuType.SIMPLIFIED_LIST_REWARD);
+                guiTracker.addToSimplifiedListTracker(p.getUniqueId(), list);
                 return true;
 
             default:

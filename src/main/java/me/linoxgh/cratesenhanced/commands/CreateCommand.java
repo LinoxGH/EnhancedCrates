@@ -15,7 +15,7 @@ public class CreateCommand extends Command {
     private final CrateStorage crates;
     private final MessageStorage messages;
 
-    CreateCommand(@NotNull String name, @NotNull Map<String, Command> commandMap, @NotNull CrateStorage crates, @NotNull MessageStorage messages) {
+    protected CreateCommand(@NotNull String name, @NotNull Map<String, Command> commandMap, @NotNull CrateStorage crates, @NotNull MessageStorage messages) {
         super(name, commandMap);
         this.crates = crates;
         this.messages = messages;

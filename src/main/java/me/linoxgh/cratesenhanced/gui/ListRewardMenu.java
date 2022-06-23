@@ -11,6 +11,7 @@ import me.linoxgh.cratesenhanced.data.rewards.ItemReward;
 import me.linoxgh.cratesenhanced.data.rewards.MoneyReward;
 import me.linoxgh.cratesenhanced.data.rewards.Reward;
 import net.kyori.adventure.text.Component;
+import net.kyori.adventure.text.format.TextDecoration;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.inventory.Inventory;
@@ -133,7 +134,15 @@ public class ListRewardMenu {
                 if ((page * 45 + slot) >= rewards.size()) break;
                 Reward<?> reward = rewards.get(page * 45 + slot);
                 if (reward instanceof ItemReward) {
-                    inv.setItem(slot, ((ItemReward) reward).getReward());
+                    ItemStack item = ((ItemReward) reward).getReward();
+                    ItemMeta itemMeta = item.getItemMeta();
+                    List<Component> lore = (itemMeta.lore() == null) ? new ArrayList<>() : itemMeta.lore();
+                    lore.add(Component.text("§f "));
+                    lore.add(Component.text("§3Weight: §f" + reward.getWeight()).decoration(TextDecoration.ITALIC, false));
+                    itemMeta.lore(lore);
+                    item.setItemMeta(itemMeta);
+
+                    inv.setItem(slot, item);
 
                 } else if (reward instanceof ItemGroupReward) {
                     ItemStack[] itemGroup = ((ItemGroupReward) reward).getReward();
@@ -142,8 +151,10 @@ public class ListRewardMenu {
                     symbolMeta.displayName(Component.text("§9Item Group Reward"));
                     List<Component> lore = new ArrayList<>();
                     for (ItemStack rewardStack : itemGroup) {
-                        lore.add(Component.text("§r§6" + rewardStack.getAmount() + "§3x §f- §r").append(rewardStack.displayName()));
+                        lore.add(Component.text("§6" + rewardStack.getAmount() + "§3x §f- ").append(rewardStack.displayName()).decoration(TextDecoration.ITALIC, false));
                     }
+                    lore.add(Component.text("§f "));
+                    lore.add(Component.text("§3Weight: §f" + reward.getWeight()).decoration(TextDecoration.ITALIC, false));
                     symbolMeta.lore(lore);
                     symbol.setItemMeta(symbolMeta);
 
@@ -154,7 +165,9 @@ public class ListRewardMenu {
                     ItemMeta symbolMeta = symbol.getItemMeta();
                     symbolMeta.displayName(Component.text("§9Command Reward"));
                     List<Component> lore = new ArrayList<>();
-                    lore.add(Component.text("§r" + ((CommandReward) reward).getReward()));
+                    lore.add(Component.text(((CommandReward) reward).getReward()).decoration(TextDecoration.ITALIC, false));
+                    lore.add(Component.text("§f "));
+                    lore.add(Component.text("§3Weight: §f" + reward.getWeight()).decoration(TextDecoration.ITALIC, false));
                     symbolMeta.lore(lore);
                     symbol.setItemMeta(symbolMeta);
 
@@ -165,7 +178,9 @@ public class ListRewardMenu {
                     ItemMeta symbolMeta = symbol.getItemMeta();
                     symbolMeta.displayName(Component.text("§9Money Reward"));
                     List<Component> lore = new ArrayList<>();
-                    lore.add(Component.text("§r§6Money: §9" + ((MoneyReward) reward).getReward()));
+                    lore.add(Component.text("§6Money: §9" + ((MoneyReward) reward).getReward()).decoration(TextDecoration.ITALIC, false));
+                    lore.add(Component.text("§f "));
+                    lore.add(Component.text("§3Weight: §f" + reward.getWeight()).decoration(TextDecoration.ITALIC, false));
                     symbolMeta.lore(lore);
                     symbol.setItemMeta(symbolMeta);
 
