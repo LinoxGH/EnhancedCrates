@@ -1,7 +1,6 @@
 package me.linoxgh.cratesenhanced;
 
 import me.linoxgh.cratesenhanced.commands.MainCommand;
-import me.linoxgh.cratesenhanced.commands.MainTabComplete;
 import me.linoxgh.cratesenhanced.data.BlockPosition;
 import me.linoxgh.cratesenhanced.data.Crate;
 import me.linoxgh.cratesenhanced.data.CrateStorage;
@@ -16,7 +15,6 @@ import me.linoxgh.cratesenhanced.gui.GUITracker;
 import me.linoxgh.cratesenhanced.io.IOManager;
 import net.milkbowl.vault.economy.Economy;
 import org.bstats.bukkit.Metrics;
-import org.bukkit.command.PluginCommand;
 import org.bukkit.configuration.serialization.ConfigurationSerialization;
 import org.bukkit.plugin.RegisteredServiceProvider;
 import org.bukkit.plugin.java.JavaPlugin;
@@ -71,9 +69,7 @@ public class CratesEnhanced extends JavaPlugin {
             getLogger().info(messageStorage.getMessage("general.loading.success-vault"));
         }
 
-        PluginCommand cmd = getCommand("crates");
-        cmd.setTabCompleter(new MainTabComplete(crateStorage));
-        cmd.setExecutor(new MainCommand(crateStorage, guiTracker, messageStorage));
+        getCommand("crates").setExecutor(new MainCommand(crateStorage, guiTracker, messageStorage));
 
         crateListeners = new CrateListeners(this, crateStorage, messageStorage);
         guiListeners = new GuiListeners(this, crateStorage, guiTracker);
