@@ -89,7 +89,7 @@ public class CrateListeners implements Listener {
             plugin.getGuiTracker().addToSimplifiedListTracker(p.getUniqueId(), menu);
             plugin.getGuiTracker().addToMenuTracker(p.getUniqueId(), MenuType.SIMPLIFIED_LIST_REWARD);
 
-        } else {
+        } else if (heldItem != null && heldItem.isSimilar(type.getKey())) {
             int newAmount = heldItem.getAmount() - type.getKey().getAmount();
             if (newAmount < 0) return;
 
