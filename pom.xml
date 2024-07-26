@@ -5,11 +5,11 @@
     <modelVersion>4.0.0</modelVersion>
 
     <groupId>me.linoxgh</groupId>
-    <artifactId>CratesEnhanced</artifactId>
+    <artifactId>EnhancedCrates</artifactId>
     <version>2.2</version>
     <packaging>jar</packaging>
 
-    <name>Crates Enhanced</name>
+    <name>Enhanced Crates</name>
 
     <description>The enhanced solution for your Pay2Win servers!</description>
     <properties>
@@ -36,7 +36,7 @@
                     <relocations>
                         <relocation>
                             <pattern>org.bstats</pattern>
-                            <shadedPattern>me.linoxgh.cratesenhanced.metrics</shadedPattern>
+                            <shadedPattern>me.linoxgh.enhancedcrates.metrics</shadedPattern>
                         </relocation>
                     </relocations>
                 </configuration>
@@ -80,7 +80,7 @@
         <dependency>
             <groupId>io.papermc.paper</groupId>
             <artifactId>paper-api</artifactId>
-            <version>1.17.1-R0.1-SNAPSHOT</version>
+            <version>1.20.4-R0.1-SNAPSHOT</version>
             <scope>provided</scope>
         </dependency>
         <dependency>
