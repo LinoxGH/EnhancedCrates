@@ -1,7 +1,7 @@
-# Crates Enhanced
+# EnhancedCrates
 
 ### Description:
-Crates Enhanced is a new Crates PaperMC plugin that supports custom items, fully configurable crate types and multiple crates for each type.
+EnhancedCrates is a new Crates PaperMC plugin that supports custom items, fully configurable crate types and multiple crates for each type.
 
 Here is how the plugin works: <br/>
 A crate's possible rewards and the key to unlock it are defined by its type.
